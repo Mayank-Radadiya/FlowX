@@ -16,8 +16,10 @@
  * ---------------------------------------------------------------------------
  */
 
-import { initTRPC } from '@trpc/server';
-import { cache } from 'react';
+import { auth } from "@/lib/auth";
+import { initTRPC, TRPCError } from "@trpc/server";
+import { headers } from "next/headers";
+import { cache } from "react";
 
 /**
  * createTRPCContext
@@ -39,7 +41,7 @@ export const createTRPCContext = cache(async () => {
    *
    * Docs: https://trpc.io/docs/server/context
    */
-  return { userId: 'user_123' };
+  return { userId: "user_123" };
 });
 
 /**
@@ -72,4 +74,35 @@ export const createCallerFactory = t.createCallerFactory;
 // Base TRPC procedure (e.g., used to define queries, mutations)
 export const baseProcedure = t.procedure;
 
+/**
+ * This middleware creates a protected TRPC procedure that requires the user
+ * to be authenticated before accessing the resolver. It integrates the app’s
+ * authentication layer directly into TRPC, ensuring that protected routes
+ * cannot be called without a valid session.
+ *
+ * When a request hits this procedure:
+ *   1. It extracts the user's session from the incoming request headers.
+ *   2. If no session is found, an UNAUTHORIZED TRPC error is thrown.
+ *   3. If authenticated, the session is added to the TRPC context and the
+ *      resolver continues with the user’s data included.
+ *
+ * This allows all TRPC routes built from `protectedProcedure` to safely rely
+ * on authentication information (e.g., userId, email, roles, etc.).
+ */
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  // Attempt to retrieve the session using the request headers
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
+  // Block access if user is not authenticated
+  if (!session) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User is not authenticated",
+    });
+  }
+
+  // Continue execution and inject the authenticated session into context
+  return next({ ctx: { ...ctx, auth: session } });
+});
