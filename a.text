@@ -1,0 +1,10 @@
+For prisma ORM
+
+commands-
+bunx prisma migrate dev
+bunx prisma generate
+
+
+Delete database
+bunx prisma migrate reset
+
