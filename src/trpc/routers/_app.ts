@@ -4,7 +4,7 @@
  * for the client and server to call.
  */
 
-import { baseProcedure, createTRPCRouter } from "../init";
+import { createTRPCRouter, protectedProcedure } from "../init";
 import { prisma } from "@/lib/db";
 
 // Root TRPC router that groups all procedure endpoints
@@ -15,7 +15,7 @@ export const appRouter = createTRPCRouter({
    * Simple query that fetches all users from the database
    * using Prisma ORM.
    */
-  getUser: baseProcedure.query(() => {
+  getUser: protectedProcedure.query(() => {
     return prisma.user.findMany();
   }),
 });

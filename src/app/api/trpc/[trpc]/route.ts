@@ -13,9 +13,8 @@
  * route inside Next.js.
  */
 
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { createTRPCContext } from '@/trpc/init';
-import { appRouter } from '@/trpc/routers/_app';
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { createTRPCContext } from "@/trpc/init";import { appRouter } from "@/trpc/routers/_app";
 
 /**
  * The main request handler that connects:
@@ -24,13 +23,14 @@ import { appRouter } from '@/trpc/routers/_app';
  *   - The TRPC context (auth, db, etc.)
  *   - The API endpoint path
  */
+
 const handler = (req: Request) =>
   fetchRequestHandler({
-    endpoint: '/api/trpc',   // Base API URL for all TRPC operations
-    req,                     // Incoming HTTP request
-    router: appRouter,       // Route resolver for all TRPC procedures
-    createContext: createTRPCContext, // Context factory for each request
+    endpoint: "/api/trpc", // URL for TRPC API
+    req, // Incoming request object
+    router: appRouter, // Root TRPC router with all procedures
+    createContext: createTRPCContext, // Generates context for each request
   });
 
-// Expose TRPC handler for both GET and POST HTTP methods
+// Export handler for both GET and POST methods (required by TRPC)
 export { handler as GET, handler as POST };
