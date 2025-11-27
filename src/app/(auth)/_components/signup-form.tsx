@@ -24,6 +24,7 @@ import { ToggleButton } from "@/components/global/ToggleButton";
 import { Meteors } from "@/components/ui/meteors";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import GoogleButton from "@/components/global/GoogleButton";
 
 const signUpZodSchema = z
   .object({
@@ -58,7 +59,7 @@ export default function SignUpForm() {
   });
 
   const handleSignUp = async (data: SignUpFormType) => {
-     setIsLoading(true);
+    setIsLoading(true);
     await authClient.signUp.email(
       {
         name: data.email,
@@ -113,19 +114,21 @@ export default function SignUpForm() {
           href="/"
           className="group flex items-center gap-3 transition-all duration-300"
         >
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-lg bg-linear-to-br from-background via-background to-background ring-1 ring-primary/20 backdrop-blur-sm overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-primary/10">
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-lg bg-linear-to-br from-background via-background to-background  backdrop-blur-sm overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-primary/10">
             <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-80"></div>
             <Image
-              src={"/logo.png"}
+              src={"/logo.svg"}
               alt="Logo"
-              width={36}
-              height={36}
+              width={44}
+              height={44}
               className="relative z-10 transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <span className="bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
             Flow
-            <span className="text-primary/90 font-bold text-3xl ml-1">X</span>
+            <span className="text-primary/90 font-bold text-4xl ml-1 font-mono">
+              X
+            </span>
           </span>
         </Link>
       </motion.div>
@@ -136,7 +139,7 @@ export default function SignUpForm() {
         transition={{ duration: 0.5, delay: 0.1 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="border hover:border-white/30 transition-all duration-500 shadow-xl backdrop-blur-sm bg-background/30 ">
+        <Card className="border hover:border-white/30 transition-all duration-500 shadow-xl backdrop-blur-lg bg-background/20 bg-opacity-90 ">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold bg-linear-to-br from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
               Create account
@@ -255,6 +258,19 @@ export default function SignUpForm() {
                 )}
               </Button>
             </form>
+
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border/50"></div>
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-background/80 px-3 text-muted-foreground backdrop-blur-sm">
+                  Or SignUp with
+                </span>
+              </div>
+            </div>
+
+            <GoogleButton />
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 pt-0">
             <div className="relative w-full">
