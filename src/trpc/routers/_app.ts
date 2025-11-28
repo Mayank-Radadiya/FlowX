@@ -4,6 +4,7 @@
  * for the client and server to call.
  */
 
+import { inngest } from "@/inngest/client";
 import { createTRPCRouter, protectedProcedure } from "../init";
 import { prisma } from "@/lib/db";
 
@@ -17,6 +18,12 @@ export const appRouter = createTRPCRouter({
    */
   getUser: protectedProcedure.query(() => {
     return prisma.user.findMany();
+  }),
+
+  testAi: protectedProcedure.mutation(async () => {
+    await inngest.send({
+      name: "execute/ai",
+    });
   }),
 });
 
