@@ -10,4 +10,4 @@ const Page = async () => {
   );
 };
 
-export default Page; 
+export default Page;
