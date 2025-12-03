@@ -4,27 +4,12 @@
  * for the client and server to call.
  */
 
-import { inngest } from "@/inngest/client";
-import { createTRPCRouter, protectedProcedure } from "../init";
-import { prisma } from "@/lib/db";
+import { createTRPCRouter } from "../init";
+import { workflowRouter } from "@/features/workflows/server/route";
 
 // Root TRPC router that groups all procedure endpoints
 export const appRouter = createTRPCRouter({
-  /**
-   * getUser
-   * --------
-   * Simple query that fetches all users from the database
-   * using Prisma ORM.
-   */
-  getUser: protectedProcedure.query(() => {
-    return prisma.user.findMany();
-  }),
-
-  testAi: protectedProcedure.mutation(async () => {
-    await inngest.send({
-      name: "execute/ai",
-    });
-  }),
+  workflows: workflowRouter,
 });
 
 // Export API type for full type-safety across client and server

@@ -2,7 +2,6 @@
 
 import { authClient } from "@/lib/auth-client";
 import {
-  SidebarFn,
   SidebarBody,
   SidebarBrand,
   SidebarFooter,
@@ -30,33 +29,27 @@ function Sidebar() {
   };
 
   return (
-    <>
-      <SidebarFn>
-        <SidebarBody>
-          <SidebarBrand />
+    <SidebarBody>
+      <SidebarBrand />
 
-          <SidebarNav title="Main">
-            {NAV_ITEMS.map((item) => (
-              <SidebarLink key={item.href} {...item} />
-            ))}
-          </SidebarNav>
+      <SidebarNav title="Main">
+        {NAV_ITEMS.map((item) => (
+          <SidebarLink key={item.href} {...item} />
+        ))}
+      </SidebarNav>
 
-          <SidebarFooter>
-            <UpgradeProButton />
-            <SidebarUser
-              name={data?.user.name || "Jon Doe"}
-              email={data?.user.email || "jon123@gmail.com"}
-              avatar={
-                data?.user.image ||
-                data?.user.name?.charAt(0).toUpperCase() ||
-                "J"
-              }
-              onLogout={() => logOut()}
-            />
-          </SidebarFooter>
-        </SidebarBody>
-      </SidebarFn>
-    </>
+      <SidebarFooter>
+        <UpgradeProButton />
+        <SidebarUser
+          name={data?.user.name || "Jon Doe"}
+          email={data?.user.email || "jon123@gmail.com"}
+          avatar={
+            data?.user.image || data?.user.name?.charAt(0).toUpperCase() || "J"
+          }
+          onLogout={() => logOut()}
+        />
+      </SidebarFooter>
+    </SidebarBody>
   );
 }
 

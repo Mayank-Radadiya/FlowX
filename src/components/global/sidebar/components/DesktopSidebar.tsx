@@ -18,7 +18,7 @@ export const DesktopSidebar = ({
   return (
     <motion.aside
       className={cn(
-        "group/sidebar relative hidden h-screen w-[280px] shrink-0 border-r border-neutral-200/50 bg-white/80 backdrop-blur-xl shadow-[0_0_40px_-15px_rgba(0,0,0,0.1)] transition-colors dark:border-neutral-800/50 dark:bg-neutral-950/80 md:flex overflow-hidden",
+        "group/sidebar fixed left-0 top-0 z-40 hidden h-screen w-[280px] shrink-0 border-r border-neutral-200/50 bg-white/80 backdrop-blur-xl shadow-[0_0_40px_-15px_rgba(0,0,0,0.1)] transition-colors dark:border-neutral-800/50 dark:bg-neutral-950/80 md:flex overflow-hidden",
         className
       )}
       initial={false}

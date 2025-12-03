@@ -17,12 +17,16 @@
 
 import "server-only"; // Ensures this file is ONLY executed on the server and never bundled for the client
 
-import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
+import {
+  createTRPCOptionsProxy,
+  TRPCQueryOptions,
+} from "@trpc/tanstack-react-query";
 import { cache } from "react";
 
 import { createTRPCContext } from "./init"; // Shared TRPC context (auth, db, etc.)
 import { makeQueryClient } from "./query-client"; // Factory for creating a React Query client
 import { appRouter } from "./routers/_app"; // Root TRPC router containing all sub-routers
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 /**
  * getQueryClient
@@ -65,3 +69,42 @@ export const trpc = createTRPCOptionsProxy({
  *   const user = await caller.user.getById({ id: "123" });
  */
 export const caller = appRouter.createCaller(createTRPCContext);
+
+/*
+  Utility function to prefetch TRPC queries or infinite queries.
+  This allows server components or layouts to warm up the React Query cache
+  before hydration, improving load performance and reducing waterfalls.
+*/
+
+export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
+  queryOptions: T
+) {
+  const queryClient = getQueryClient();
+
+  // Detect infinite queries by inspecting the query key metadata
+  if (queryOptions.queryKey[1]?.type === "infinite") {
+    // Prefetch infinite query pages
+    void queryClient.prefetchInfiniteQuery(queryOptions as any);
+  } else {
+    // Prefetch standard queries
+    void queryClient.prefetchQuery(queryOptions);
+  }
+}
+
+
+/**
+ * Wraps children in a React Query HydrationBoundary.
+ * Used to restore prefetched server-side data on the client,
+ * enabling seamless hydration without additional network requests.
+ */
+
+export function HydrateClient(props: { children: React.ReactNode }) {
+  const queryClient = getQueryClient();
+
+  // Provide dehydrated server state so React Query can hydrate on the client
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      {props.children}
+    </HydrationBoundary>
+  );
+}
