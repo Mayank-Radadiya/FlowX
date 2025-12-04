@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Loader2, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { TextAnimation } from "../../animation/TextAnimation";
 
 type PageHeaderProps = {
   title: string;
@@ -217,7 +218,7 @@ export const PageHeader = ({
 
                   {/* Title */}
                   <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-                    {title}
+                    <TextAnimation text={title} />
                   </h1>
                 </div>
               </div>
