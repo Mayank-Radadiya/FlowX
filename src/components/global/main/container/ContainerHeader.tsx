@@ -4,15 +4,10 @@
 
 interface ContainerHeaderProps {
   title: string;
-  description?: string;
   icon?: React.ReactNode;
 }
 
-export const ContainerHeader = ({
-  title,
-  description,
-  icon,
-}: ContainerHeaderProps) => {
+export const ContainerHeader = ({ title, icon }: ContainerHeaderProps) => {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between font-mono">
       <div className="flex min-w-0 items-center gap-3">
@@ -25,11 +20,6 @@ export const ContainerHeader = ({
           <h2 className="truncate text-base font-semibold tracking-tight">
             {title}
           </h2>
-          {description && (
-            <p className="truncate text-sm text-muted-foreground">
-              {description}
-            </p>
-          )}
         </div>
       </div>
     </div>

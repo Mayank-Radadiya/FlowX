@@ -58,8 +58,8 @@ export const Container = ({
 
       {/* Pagination section */}
       {pagination && (
-        <div className="relative border-t border-border/40 bg-muted/30">
-          <div className="flex items-center justify-between px-5 py-4 sm:px-6">
+        <div className="relative w-full border-border/40 bg-background/50 backdrop-blur-sm">
+          <div className="flex w-full items-center justify-end px-5 py-4 sm:px-6 [&_nav]:mx-0 [&_nav]:justify-end">
             {pagination}
           </div>
         </div>

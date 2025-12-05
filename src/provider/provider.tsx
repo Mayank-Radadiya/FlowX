@@ -1,12 +1,15 @@
 /**
  * Wraps the application with global UI providers, including theme management
  * and toast notifications. Applies consistent styling for all toast messages.
+ * NuqsAdapter is used to integrate Nuqs functionalities.
+ * Nuqs is Type-safe search params state manager for React
  */
 
 "use client";
 
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
@@ -35,9 +38,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
           error: { duration: 6000 },
         }}
       />
-
-      {/* Render the app's content */}
-      {children}
+      <NuqsAdapter>
+        {/* Render the app's content */}
+        {children}
+      </NuqsAdapter>
     </ThemeProvider>
   );
 }
