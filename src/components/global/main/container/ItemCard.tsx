@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
+import { Clock } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface ItemCardProps {
   title: string;
-  description?: string;
+  description?: string | null;
   icon?: React.ReactNode;
   badge?: {
     label: string;
@@ -12,7 +15,13 @@ interface ItemCardProps {
   onClick?: () => void;
   className?: string;
   gradient?: "purple" | "blue" | "orange" | "green" | "none";
+  createdAt?: Date | string;
 }
+
+// Format date to relative time (e.g., "2 days ago", "just now")
+const formatRelativeTime = (date: Date | string): string => {
+  return formatDistanceToNow(new Date(date), { addSuffix: true });
+};
 
 // Glassmorphism badge variants
 const badgeVariants = {
@@ -60,11 +69,30 @@ export const ItemCard = ({
   badge,
   href,
   onClick,
+  createdAt,
   className,
   gradient = "none",
 }: ItemCardProps) => {
-  const CardWrapper = href ? "a" : onClick ? "button" : "div";
   const isInteractive = !!(href || onClick);
+
+  const cardClasses = cn(
+    // Base glassmorphism styles
+    "group relative overflow-hidden rounded-xl text-left",
+    "bg-black/2 dark:bg-white/5 backdrop-blur-xl",
+    "border border-black/10 dark:border-white/10",
+    // Shadow and transitions
+    "shadow-lg shadow-black/5",
+    "transition-all duration-300 ease-out",
+    // Interactive states
+    isInteractive && [
+      "cursor-pointer",
+      "hover:-translate-y-1",
+      "hover:shadow-2xl",
+      glowColors[gradient],
+      "active:translate-y-0 active:scale-[0.98]",
+    ],
+    className
+  );
 
   const cardContent = (
     <>
@@ -127,34 +155,37 @@ export const ItemCard = ({
             </p>
           )}
         </div>
+
+        {/* Created at timestamp */}
+        <div className="mt-3 pt-3 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
+          {createdAt && (
+            <p className="text-xs text-neutral-400 dark:text-white/40 flex items-center gap-1.5 ">
+              <Clock className="size-3" />
+              {formatRelativeTime(createdAt)}
+            </p>
+          )}
+        </div>
       </div>
     </>
   );
 
-  return (
-    <CardWrapper
-      href={href}
-      onClick={onClick}
-      className={cn(
-        // Base glassmorphism styles
-        "group relative overflow-hidden rounded-xl text-left",
-        "bg-black/2 dark:bg-white/5 backdrop-blur-xl",
-        "border border-black/10 dark:border-white/10",
-        // Shadow and transitions
-        "shadow-lg shadow-black/5",
-        "transition-all duration-300 ease-out",
-        // Interactive states
-        isInteractive && [
-          "cursor-pointer",
-          "hover:-translate-y-1",
-          "hover:shadow-2xl",
-          glowColors[gradient],
-          "active:translate-y-0 active:scale-[0.98]",
-        ],
-        className
-      )}
-    >
-      {cardContent}
-    </CardWrapper>
-  );
+  if (href) {
+    return (
+      <>
+        <Link href={href} className={cardClasses}>
+          {cardContent}
+        </Link>
+      </>
+    );
+  }
+
+  if (onClick) {
+    return (
+      <button onClick={onClick} className={cardClasses}>
+        {cardContent}
+      </button>
+    );
+  }
+
+  return <div className={cardClasses}>{cardContent}</div>;
 };

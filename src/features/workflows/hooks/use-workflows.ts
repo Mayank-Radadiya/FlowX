@@ -36,11 +36,14 @@ export const useWorkflowsPagination = () => {
 
   const queryOptions = trpc.workflows.getMany.queryOptions(params);
 
+  // Get cached data synchronously first to ensure consistent SSR/CSR values
+  const cachedData = queryClient.getQueryData(queryOptions.queryKey);
+
   // Use useQuery that subscribes to cache updates but NEVER fetches
   const { data } = useQuery({
     ...queryOptions,
     enabled: false, // NEVER fetch - only read from cache
-    initialData: () => queryClient.getQueryData(queryOptions.queryKey),
+    initialData: cachedData,
   });
 
   // Update only URL params — not hitting the backend
@@ -105,9 +108,34 @@ export const useCreateWorkflow = () => {
 
         // Refresh cached workflows list
         queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}));
+
+        // Preload the created workflow data into cache
+        queryClient.invalidateQueries(
+          trpc.workflows.getOne.queryFilter({ id: data.id })
+        );
       },
       onError: (error) => {
         toast.error(`Error creating workflow: ${error.message}`);
+      },
+    })
+  );
+};
+
+// Mutation hook for removing a workflow
+export const useRemoveWorkflow = () => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    trpc.workflows.remove.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow "${data.name}" removed successfully`);
+
+        // Refresh cached workflows list
+        queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}));
+      },
+      onError: (error) => {
+        toast.error(`Error removing workflow: ${error.message}`);
       },
     })
   );

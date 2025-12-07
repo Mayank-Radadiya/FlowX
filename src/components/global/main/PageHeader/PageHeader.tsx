@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, Plus, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { TextAnimation } from "../../animation/TextAnimation";
+import CreateWorkFlowDialog from "@/app/(workspace)/(flows)/workflow/_components/CreateWorkFlowDialog";
 
 type PageHeaderProps = {
   title: string;
@@ -72,17 +73,6 @@ export const PageHeader = ({
   const renderButton = () => {
     if (!buttonLabel) return null;
 
-    const buttonContent = (
-      <>
-        <span className="relative z-10">{buttonLabel}</span>
-        {isCreating ? (
-          <Loader2 className="relative z-10 size-4 animate-spin" />
-        ) : (
-          <ArrowRight className="relative z-10 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-        )}
-      </>
-    );
-
     const buttonClasses = cn(
       "group relative h-11 overflow-hidden rounded-xl px-6 font-medium text-white shadow-lg transition-all duration-300",
       "bg-linear-to-r",
@@ -91,6 +81,7 @@ export const PageHeader = ({
       "before:absolute before:inset-0 before:bg-white/20 before:opacity-0 before:transition-opacity hover:before:opacity-100"
     );
 
+    // If it's a link button
     if (newButtonHref) {
       return (
         <Button
@@ -98,20 +89,35 @@ export const PageHeader = ({
           disabled={disabled || isCreating}
           className={buttonClasses}
         >
-          <Link href={newButtonHref}>{buttonContent}</Link>
+          <Link href={newButtonHref}>
+            {buttonLabel}
+            {isCreating ? (
+              <Loader2 className="relative z-10 ml-2 size-4 animate-spin" />
+            ) : (
+              <ArrowRight className="relative z-10 ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            )}
+          </Link>
         </Button>
       );
     }
 
+    // If it has an onClick handler (dialog trigger)
     if (onNew) {
       return (
-        <Button
-          onClick={onNew}
-          disabled={disabled || isCreating}
-          className={buttonClasses}
+        <CreateWorkFlowDialog
+          triggerClassName={cn(
+            buttonClasses,
+            (disabled || isCreating) && "pointer-events-none opacity-50"
+          )}
         >
-          {buttonContent}
-        </Button>
+          <div className="flex items-center ">
+            {buttonLabel}
+            <ArrowRight className="relative z-10 ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            {isCreating && (
+              <Loader2 className="relative z-10 ml-2 size-4 animate-spin" />
+            )}
+          </div>
+        </CreateWorkFlowDialog>
       );
     }
 

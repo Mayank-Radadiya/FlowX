@@ -23,14 +23,22 @@ import z from "zod";
 
 export const workflowRouter = createTRPCRouter({
   // Create a new workflow for the authenticated user
-  create: protectedProcedure.mutation(({ ctx }) => {
-    return prisma.workflow.create({
-      data: {
-        name: generateSlug(3),       // Auto-generate a readable name
-        userId: ctx.auth.user.id,    // Ensure workflow belongs to the logged-in user
-      },
-    });
-  }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        description: z.string().optional().default("This workflow is about..."),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return prisma.workflow.create({
+        data: {
+          name: input.name || generateSlug(3), // Auto-generate a readable name if not provided
+          userId: ctx.auth.user.id, // Ensure workflow belongs to the logged-in user
+          description: input.description,
+        },
+      });
+    }),
 
   // Delete a workflow if it belongs to the authenticated user
   remove: protectedProcedure
@@ -94,14 +102,14 @@ export const workflowRouter = createTRPCRouter({
           take: pageSize,
 
           where: {
-            userId: ctx.auth.user.id,   // Only fetch user-owned workflows
+            userId: ctx.auth.user.id, // Only fetch user-owned workflows
             name: {
-              contains: search,         // Support searching by name
+              contains: search, // Support searching by name
               mode: "insensitive",
             },
           },
           orderBy: {
-            updatedAt: "desc",          // Most recently updated first
+            updatedAt: "desc", // Most recently updated first
           },
         }),
 

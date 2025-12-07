@@ -17,18 +17,19 @@
  * ---------------------------------------------------------------------------
  */
 
-'use client'; 
+"use client";
 // Ensures this file can run in the browser and can contain React hooks
 
-import type { QueryClient } from '@tanstack/react-query';
-import { QueryClientProvider } from '@tanstack/react-query';
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import { createTRPCContext } from '@trpc/tanstack-react-query';
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { createTRPCContext } from "@trpc/tanstack-react-query";
 
-import { useState } from 'react';
-import { makeQueryClient } from './query-client';
-import type { AppRouter } from './routers/_app';
+import { useState } from "react";
+import { makeQueryClient } from "./query-client";
+import type { AppRouter } from "./routers/_app";
+import superjson from "superjson";
 
 /**
  * Create TRPC React helper utilities:
@@ -50,7 +51,7 @@ let browserQueryClient: QueryClient;
  * Browser → reuse a single instance to avoid losing cache during re-renders
  */
 function getQueryClient() {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // On the server, always return a fresh QueryClient
     return makeQueryClient();
   }
@@ -71,9 +72,9 @@ function getQueryClient() {
  */
 function getUrl() {
   const base = (() => {
-    if (typeof window !== 'undefined') return ''; // Browser: relative URL
+    if (typeof window !== "undefined") return ""; // Browser: relative URL
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    return 'http://localhost:3000'; // Default local dev URL
+    return "http://localhost:3000"; // Default local dev URL
   })();
 
   return `${base}/api/trpc`;
@@ -93,7 +94,7 @@ function getUrl() {
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;
-  }>,
+  }>
 ) {
   /**
    * IMPORTANT:
@@ -111,12 +112,11 @@ export function TRPCReactProvider(
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          // If using SuperJSON, enable the transformer here
-          // transformer: superjson,
+          transformer: superjson,
           url: getUrl(),
         }),
       ],
-    }),
+    })
   );
 
   // Provide React Query & TRPC to the component tree

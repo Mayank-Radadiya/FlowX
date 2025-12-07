@@ -20,6 +20,7 @@ import {
   getGradientForWorkflow,
 } from "@/lib/workflow-utils";
 import { useMemo } from "react";
+import EmptyWorkflowState from "./EmptyWorkflowState";
 
 export const WorkflowItems = () => {
   /**
@@ -56,6 +57,11 @@ export const WorkflowItems = () => {
     });
   }, [data?.items]);
 
+  // If no workflows, show empty state
+  if (!workflowItems || workflowItems?.length === 0) {
+    return <EmptyWorkflowState />;
+  }
+
   return (
     <ContainerGrid columns={3}>
       {/* Render workflow cards */}
@@ -63,10 +69,11 @@ export const WorkflowItems = () => {
         <ItemCard
           key={workflow.id}
           title={workflow.name}
-          description={"---"} // Placeholder for future description
+          description={workflow.description} // Placeholder for future description
           icon={<workflow.Icon className="size-5" />}
           href={`/workflow/${workflow.id}`}
           gradient={workflow.gradient}
+          createdAt={workflow.createdAt}
         />
       ))}
     </ContainerGrid>

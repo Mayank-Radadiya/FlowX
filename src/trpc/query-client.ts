@@ -17,9 +17,8 @@
 import {
   defaultShouldDehydrateQuery,
   QueryClient,
-} from '@tanstack/react-query';
-// Optional: can be enabled if your project uses SuperJSON
-// import superjson from 'superjson';
+} from "@tanstack/react-query";
+import superjson from "superjson";
 
 /**
  * makeQueryClient
@@ -43,13 +42,13 @@ export function makeQueryClient() {
        * when rendering on the server before sending to the client.
        */
       dehydrate: {
-        // If using SuperJSON, you could serialize complex data types here
-        // serializeData: superjson.serialize,
+        // Using SuperJSON, you could serialize complex data types here
+        serializeData: superjson.serialize,
 
         // Only dehydrate queries that normally qualify OR if the query is pending
         shouldDehydrateQuery: (query) =>
           defaultShouldDehydrateQuery(query) ||
-          query.state.status === 'pending',
+          query.state.status === "pending",
       },
 
       /**
@@ -57,8 +56,8 @@ export function makeQueryClient() {
        * Defines how dehydrated data should be restored on the client.
        */
       hydrate: {
-        // If using SuperJSON, you would deserialize complex types here
-        // deserializeData: superjson.deserialize,
+        // Using SuperJSON, you would deserialize complex types here
+        deserializeData: superjson.deserialize,
       },
     },
   });

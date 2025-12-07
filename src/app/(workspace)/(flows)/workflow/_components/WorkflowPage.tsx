@@ -4,7 +4,7 @@
  * High-level page layout for the Workflows section.
  *
  * This component combines:
- *  - A header with description + "Create Workflow" button
+ *  - A header with description + "Create Workflow" dialog
  *  - A search bar to filter workflows
  *  - A paginated list container
  *  - A pagination UI synced with query parameters
@@ -36,15 +36,6 @@ interface WorkflowPageProps {
 }
 
 export const CreateWorkFlowPage = ({ children }: WorkflowPageProps) => {
-  /**
-   * createWorkflow Mutation
-   * -----------------------
-   * - Creates a new workflow
-   * - Redirects user to the workflow page after creation
-   * - Invalidates workflow list cache
-   * - Shows success/error toast
-   */
-  const createWorkflow = useCreateWorkflow();
 
   /**
    * useWorkflowsPagination Hook
@@ -61,15 +52,6 @@ export const CreateWorkFlowPage = ({ children }: WorkflowPageProps) => {
   const { currentPage, totalPages, search, setSearch } =
     useWorkflowsPagination();
 
-  /**
-   * Trigger workflow creation
-   * - Calls the mutation
-   * - Button in PageHeader uses isCreating for loading state
-   */
-  const handleCreateWorkflow = () => {
-    createWorkflow.mutate();
-  };
-
   return (
     <>
       {/* ------------------------------------------
@@ -82,8 +64,7 @@ export const CreateWorkFlowPage = ({ children }: WorkflowPageProps) => {
         buttonLabel="Create Workflow"
         icon={<GitPullRequestArrow className="size-6" />}
         gradient="purple"
-        onNew={handleCreateWorkflow}
-        isCreating={createWorkflow.isPending}
+        onNew={() => {}}// Handled inside CreateWorkFlowDialog
       />
 
       {/* ------------------------------------------
