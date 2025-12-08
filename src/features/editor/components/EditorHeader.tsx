@@ -12,6 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { EditorSettings } from "./basicUi/EditorSettings";
+import { ToggleButton } from "@/components/global/ToggleButton";
 
 interface EditorHeaderProps {
   workflowName: string;
@@ -51,6 +52,7 @@ export function EditorHeader({
 
       {/* Right - Actions */}
       <div className="flex items-center gap-1.5">
+        <ToggleButton />
         <EditorSettings />
         <div className="h-4 w-px bg-border" />
         <Button variant="ghost" size="sm" onClick={onSave}>

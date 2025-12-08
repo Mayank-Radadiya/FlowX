@@ -18,6 +18,8 @@
 import { PAGINATION } from "@/constants";
 import { prisma } from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
+import { NodeType } from "@prisma/client";
+import type { Node, Edge } from "@xyflow/react";
 import { generateSlug } from "random-word-slugs";
 import z from "zod";
 
@@ -36,6 +38,13 @@ export const workflowRouter = createTRPCRouter({
           name: input.name || generateSlug(3), // Auto-generate a readable name if not provided
           userId: ctx.auth.user.id, // Ensure workflow belongs to the logged-in user
           description: input.description,
+          nodes: {
+            create: {
+              type: NodeType.INITIAL,
+              position: { x: 0, y: 0 },
+              name: NodeType.INITIAL,
+            },
+          },
         },
       });
     }),
@@ -75,13 +84,40 @@ export const workflowRouter = createTRPCRouter({
   // Retrieve a single workflow owned by the user
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(({ ctx, input }) => {
-      return prisma.workflow.findFirstOrThrow({
+    .query(async ({ ctx, input }) => {
+      const workflow = await prisma.workflow.findFirstOrThrow({
         where: {
           id: input.id,
           userId: ctx.auth.user.id, // Ensure access is restricted
         },
+        include: {
+          nodes: true,
+          connections: true,
+        },
       });
+
+      const nodes: Node[] = workflow.nodes.map((node) => ({
+        id: node.id,
+        type: node.type,
+        position: node.position as { x: number; y: number },
+        data: (node.data as Record<string, unknown>) || {},
+      }));
+
+      const edges: Edge[] = workflow.connections.map((conn) => ({
+        id: conn.id,
+        source: conn.formNodeId,
+        target: conn.toNodeId,
+        sourceHandle: conn.fromOutput,
+        targetHandle: conn.toInput,
+      }));
+
+      return {
+        id: workflow.id,
+        name: workflow.name,
+        description: workflow.description,
+        nodes,
+        edges,
+      };
     }),
 
   // Paginated list of workflows with optional search

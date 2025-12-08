@@ -3,8 +3,8 @@ import { requiredAuth } from "@/lib/auth-utils";
 import { HydrateClient } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { EditorError } from "../../../../../features/components/EditorError";
-import Editor from "../../../../../features/components/Editor";
+import { EditorError } from "@/features/editor/components/EditorError";
+import Editor from "@/features/editor/components/Editor";
 
 interface Props {
   params: Promise<{ workflowId: string }>;
