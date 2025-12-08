@@ -52,17 +52,22 @@ export const workflowRouter = createTRPCRouter({
       });
     }),
 
-  // Update workflow name (only allowed for owner)
-  updateNAme: protectedProcedure
-    .input(z.object({ id: z.string(), name: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return prisma.workflow.updateMany({
-        where: {
-          id: input.id,
-          userId: ctx.auth.user.id, // Authorization check
-        },
+  // Update workflow name and description (only allowed for owner)
+  updateNameAndDescription: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      //  update and return the workflow
+      return prisma.workflow.update({
+        where: { id: input.id },
         data: {
           name: input.name,
+          description: input.description,
         },
       });
     }),
@@ -71,7 +76,7 @@ export const workflowRouter = createTRPCRouter({
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
-      return prisma.workflow.findFirst({
+      return prisma.workflow.findFirstOrThrow({
         where: {
           id: input.id,
           userId: ctx.auth.user.id, // Ensure access is restricted

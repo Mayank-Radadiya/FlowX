@@ -210,25 +210,3 @@ const CreateWorkFlowDialog = ({
 };
 
 export default CreateWorkFlowDialog;
-
-
-// Error creating workflow:
-// Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].workflow.create()` invocation in
-// /Users/aizen/Documents/Coding/NextJS/FlowX/.next/dev/server/chunks/[root-of-the-server]__bab763a4._.js:332:150
-
-// 329 name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["default"].string().optional(),
-// 330 description: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["default"].string().optional()
-// 331 })).mutation(({ ctx, input })=>{
-// → 332 return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].workflow.create({
-// data: {
-// name: "Hello",
-// userId: "mydG2wlnRAFPfBEE7dOjyVTKuP4oMj0d",
-// description: "I don't know",
-// ~~~~~~~~~~~
-// ? id?: String,
-// ? createdAt?: DateTime,
-// ? updatedAt?: DateTime
-// }
-// })
-
-// Unknown argument `description`. Availab
