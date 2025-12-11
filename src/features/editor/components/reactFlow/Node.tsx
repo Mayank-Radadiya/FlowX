@@ -18,14 +18,9 @@ import {
   Panel,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { NODE_COMPONENTS } from "@/constants/node-componet";
+import { NODE_COMPONENTS } from "@/constants/node-component";
 import { cn } from "@/lib/utils";
-
-// const initialNodes = [
-//   { id: "n1", position: { x: 0, y: 0 }, data: { label: "Node 1" } },
-//   { id: "n2", position: { x: 0, y: 100 }, data: { label: "Node 2" } },
-// ];
-// const initialEdges = [{ id: "n1-n2", source: "n1", target: "n2" }];
+import AddNewNodeButton from "./Nodes/NodeSelector/AddNewNodeButton";
 
 interface FlowCanvasProps {
   nodes: Node[];
@@ -78,7 +73,7 @@ const FlowCanvas = ({
           size={2}
           color="rgba(139, 92, 246, 0.3)"
         />
-        <Controls className="[&]:bg-white/80 [&]:dark:bg-neutral-900/80 [&]:backdrop-blur-sm [&]:border [&]:border-violet-200/50 [&]:dark:border-violet-500/20 [&]:rounded-lg [&]:shadow-lg" />
+        <Controls />
         <MiniMap
           className={cn(
             "[&]:bg-white/80 [&]:dark:bg-neutral-900/80",
@@ -89,21 +84,10 @@ const FlowCanvas = ({
           )}
           nodeColor={"#b59cf1"}
           maskColor={"rgba(139, 92, 246, 0.15)"}
-          pannable
-          zoomable
+          bgColor={"transparent"}
         />
         <Panel position="top-right" className="m-4">
-          {/* You can add custom components or information here */}
-          <button
-            className={cn(
-              "px-4 py-2 bg-violet-600 text-white rounded-lg shadow-lg",
-              "hover:bg-violet-700",
-              "focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
-            )}
-            onClick={() => {}}
-          >
-            Add Node
-          </button>
+          <AddNewNodeButton />
         </Panel>
       </ReactFlow>
     </div>

@@ -1,244 +1,335 @@
 "use client";
 
 import { memo, useState, type ReactNode, type ComponentType } from "react";
-import { Handle, Position } from "@xyflow/react";
-import {
-  Settings,
-  Trash2,
-  MoreHorizontal,
-  type LucideProps,
-} from "lucide-react";
+import { Position, useReactFlow } from "@xyflow/react";
+import { Settings, Trash2, Copy, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  BaseNode,
-  BaseNodeHeader,
-  BaseNodeHeaderTitle,
-  BaseNodeIcon,
-  BaseNodeContent,
-  BaseNodeBadge,
-} from "@/components/ui/react-flow/base-node";
+import { BaseHandle } from "@/components/ui/react-flow/base-handle";
+// ============================================================================
+// Types
+// ============================================================================
 
 interface WorkFlowNodeProps {
+  id?: string;
   children?: ReactNode;
   showToolbar?: boolean;
   onDelete?: () => void;
   onSetting?: () => void;
+  onDuplicate?: () => void;
   name?: string;
   description?: string;
   icon?: ComponentType<LucideProps>;
   variant?: "default" | "primary" | "success" | "warning" | "danger";
   badge?: string;
-  badgeVariant?: "default" | "success" | "warning" | "error";
   hasInput?: boolean;
   hasOutput?: boolean;
   selected?: boolean;
 }
 
-// Variant color configurations
-const variantStyles = {
+// ============================================================================
+// Variant Configurations
+// ============================================================================
+
+const variants = {
   default: {
-    border: "border-neutral-200/60 dark:border-neutral-700/60",
-    bg: "bg-white/95 dark:bg-neutral-900/95",
-    header:
-      "bg-neutral-50/80 dark:bg-neutral-800/50 border-neutral-200/60 dark:border-neutral-700/60",
-    icon: "bg-neutral-100 dark:bg-neutral-700/50 text-neutral-600 dark:text-neutral-400",
-    title: "text-neutral-800 dark:text-neutral-100",
+    card: "border-neutral-200 dark:border-neutral-700/80",
+    cardSelected:
+      "border-neutral-400 dark:border-neutral-500 shadow-lg shadow-neutral-200/50 dark:shadow-neutral-900/50",
+    header: "bg-neutral-50 dark:bg-neutral-800/80",
+    iconBg: "bg-neutral-100 dark:bg-neutral-700",
+    iconText: "text-neutral-600 dark:text-neutral-300",
+    title: "text-neutral-900 dark:text-neutral-100",
+    badge:
+      "bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
     description: "text-neutral-500 dark:text-neutral-400",
-    handle: "border-neutral-400! dark:border-neutral-500!",
-    selected:
-      "border-neutral-500 dark:border-neutral-400 ring-2 ring-neutral-500/20 shadow-xl shadow-neutral-500/10",
+    handle:
+      "bg-neutral-400 dark:bg-neutral-500 border-white dark:border-neutral-900",
+    handleHover: "hover:bg-neutral-500 dark:hover:bg-neutral-400",
   },
   primary: {
-    border: "border-violet-200/60 dark:border-violet-500/30",
-    bg: "bg-linear-to-br from-white/95 to-violet-50/30 dark:from-neutral-900/95 dark:to-violet-950/20",
-    header:
-      "bg-violet-50/80 dark:bg-violet-950/50 border-violet-200/60 dark:border-violet-500/20",
-    icon: "bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400",
-    title: "text-violet-800 dark:text-violet-200",
-    description: "text-violet-600/70 dark:text-violet-400/70",
-    handle: "border-violet-400! dark:border-violet-500!",
-    selected:
-      "border-violet-500 dark:border-violet-400 ring-2 ring-violet-500/20 shadow-xl shadow-violet-500/20",
+    card: "border-violet-200 dark:border-violet-500/40",
+    cardSelected:
+      "border-violet-400 dark:border-violet-400 shadow-lg shadow-violet-200/50 dark:shadow-violet-900/30",
+    header: "bg-violet-50 dark:bg-violet-950/50",
+    iconBg: "bg-violet-100 dark:bg-violet-500/20",
+    iconText: "text-violet-600 dark:text-violet-400",
+    title: "text-violet-900 dark:text-violet-100",
+    badge:
+      "bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400",
+    description: "text-violet-600/80 dark:text-violet-300/80",
+    handle:
+      "bg-violet-500 dark:bg-violet-400 border-white dark:border-neutral-900",
+    handleHover: "hover:bg-violet-600 dark:hover:bg-violet-300",
   },
   success: {
-    border: "border-emerald-200/60 dark:border-emerald-500/30",
-    bg: "bg-linear-to-br from-white/95 to-emerald-50/30 dark:from-neutral-900/95 dark:to-emerald-950/20",
-    header:
-      "bg-emerald-50/80 dark:bg-emerald-950/50 border-emerald-200/60 dark:border-emerald-500/20",
-    icon: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
-    title: "text-emerald-800 dark:text-emerald-200",
-    description: "text-emerald-600/70 dark:text-emerald-400/70",
-    handle: "border-emerald-400! dark:border-emerald-500!",
-    selected:
-      "border-emerald-500 dark:border-emerald-400 ring-2 ring-emerald-500/20 shadow-xl shadow-emerald-500/20",
+    card: "border-emerald-200 dark:border-emerald-500/40",
+    cardSelected:
+      "border-emerald-400 dark:border-emerald-400 shadow-lg shadow-emerald-200/50 dark:shadow-emerald-900/30",
+    header: "bg-emerald-50 dark:bg-emerald-950/50",
+    iconBg: "bg-emerald-100 dark:bg-emerald-500/20",
+    iconText: "text-emerald-600 dark:text-emerald-400",
+    title: "text-emerald-900 dark:text-emerald-100",
+    badge:
+      "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+    description: "text-emerald-600/80 dark:text-emerald-300/80",
+    handle:
+      "bg-emerald-500 dark:bg-emerald-400 border-white dark:border-neutral-900",
+    handleHover: "hover:bg-emerald-600 dark:hover:bg-emerald-300",
   },
   warning: {
-    border: "border-amber-200/60 dark:border-amber-500/30",
-    bg: "bg-linear-to-br from-white/95 to-amber-50/30 dark:from-neutral-900/95 dark:to-amber-950/20",
-    header:
-      "bg-amber-50/80 dark:bg-amber-950/50 border-amber-200/60 dark:border-amber-500/20",
-    icon: "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400",
-    title: "text-amber-800 dark:text-amber-200",
-    description: "text-amber-600/70 dark:text-amber-400/70",
-    handle: "border-amber-400! dark:border-amber-500!",
-    selected:
-      "border-amber-500 dark:border-amber-400 ring-2 ring-amber-500/20 shadow-xl shadow-amber-500/20",
+    card: "border-amber-200 dark:border-amber-500/40",
+    cardSelected:
+      "border-amber-400 dark:border-amber-400 shadow-lg shadow-amber-200/50 dark:shadow-amber-900/30",
+    header: "bg-amber-50 dark:bg-amber-950/50",
+    iconBg: "bg-amber-100 dark:bg-amber-500/20",
+    iconText: "text-amber-600 dark:text-amber-400",
+    title: "text-amber-900 dark:text-amber-100",
+    badge:
+      "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400",
+    description: "text-amber-600/80 dark:text-amber-300/80",
+    handle:
+      "bg-amber-500 dark:bg-amber-400 border-white dark:border-neutral-900",
+    handleHover: "hover:bg-amber-600 dark:hover:bg-amber-300",
   },
   danger: {
-    border: "border-red-200/60 dark:border-red-500/30",
-    bg: "bg-linear-to-br from-white/95 to-red-50/30 dark:from-neutral-900/95 dark:to-red-950/20",
-    header:
-      "bg-red-50/80 dark:bg-red-950/50 border-red-200/60 dark:border-red-500/20",
-    icon: "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400",
-    title: "text-red-800 dark:text-red-200",
-    description: "text-red-600/70 dark:text-red-400/70",
-    handle: "border-red-400! dark:border-red-500!",
-    selected:
-      "border-red-500 dark:border-red-400 ring-2 ring-red-500/20 shadow-xl shadow-red-500/20",
+    card: "border-red-200 dark:border-red-500/40",
+    cardSelected:
+      "border-red-400 dark:border-red-400 shadow-lg shadow-red-200/50 dark:shadow-red-900/30",
+    header: "bg-red-50 dark:bg-red-950/50",
+    iconBg: "bg-red-100 dark:bg-red-500/20",
+    iconText: "text-red-600 dark:text-red-400",
+    title: "text-red-900 dark:text-red-100",
+    badge: "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400",
+    description: "text-red-600/80 dark:text-red-300/80",
+    handle: "bg-red-500 dark:bg-red-400 border-white dark:border-neutral-900",
+    handleHover: "hover:bg-red-600 dark:hover:bg-red-300",
   },
 };
 
+// ============================================================================
+// Toolbar Button Component
+// ============================================================================
+
+interface ToolbarButtonProps {
+  onClick?: () => void;
+  icon: ComponentType<{ className?: string }>;
+  label: string;
+  variant?: "default" | "danger";
+}
+
+const ToolbarButton = ({
+  onClick,
+  icon: Icon,
+  label,
+  variant = "default",
+}: ToolbarButtonProps) => (
+  <button
+    onClick={onClick}
+    aria-label={label}
+    className={cn(
+      "p-2 rounded-lg",
+      "bg-white dark:bg-neutral-800",
+      "border border-neutral-200 dark:border-neutral-700",
+      "text-neutral-500 dark:text-neutral-400",
+      "hover:bg-red-50 dark:hover:bg-red-500/10",
+      "hover:border-red-200 dark:hover:border-red-500/30",
+      "hover:text-red-600 dark:hover:text-red-400",
+      "shadow-sm hover:shadow-md",
+      "transition-all duration-200",
+      variant === "default" && [
+        "hover:bg-neutral-100 dark:hover:bg-neutral-700",
+        "hover:text-neutral-700 dark:hover:text-neutral-200",
+      ],
+      variant === "danger" && [
+        "hover:bg-red-50 dark:hover:bg-red-500/10",
+        "hover:text-red-600 dark:hover:text-red-400",
+      ]
+    )}
+  >
+    <Icon className="size-4" />
+  </button>
+);
+
+// ============================================================================
+// Main Component
+// ============================================================================
+
 const WorkFlowNode = memo(
   ({
+    id,
     children,
     showToolbar = true,
     onDelete,
     onSetting,
-    name = "Workflow Node",
+    onDuplicate,
+    name = "Node",
     description,
     icon: Icon,
     variant = "default",
     badge,
-    badgeVariant = "default",
     hasInput = true,
     hasOutput = true,
     selected = false,
   }: WorkFlowNodeProps) => {
     const [isHovered, setIsHovered] = useState(false);
-    const styles = variantStyles[variant];
+    const { deleteElements } = useReactFlow();
+    const styles = variants[variant];
+
+    const handleDelete = () => {
+      if (onDelete) {
+        onDelete();
+      } else if (id) {
+        deleteElements({ nodes: [{ id }] });
+      }
+    };
 
     return (
-      <BaseNode
-        className={cn(
-          "w-60 transition-all duration-200",
-          styles.border,
-          styles.bg,
-          selected && styles.selected,
-          "hover:shadow-lg"
-        )}
+      <div
+        className="relative group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Toolbar - appears on hover */}
+        {/* Floating Toolbar */}
         {showToolbar && (
           <div
             className={cn(
-              "absolute -top-9 left-1/2 -translate-x-1/2",
-              "flex items-center gap-1 px-2 py-1.5",
+              "absolute -top-10 left-1/2 -translate-x-1/2 z-20",
+              "flex items-center gap-0.5 ",
               "bg-white dark:bg-neutral-800",
               "border border-neutral-200 dark:border-neutral-700",
-              "rounded-lg shadow-lg",
-              "transition-all duration-200",
+              "rounded-lg shadow-xl shadow-black/10 dark:shadow-black/30",
+              "transition-all duration-200 ease-out",
               isHovered || selected
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-2 pointer-events-none"
+                ? "opacity-100 translate-y-0 scale-100"
+                : "opacity-0 translate-y-1 scale-95 pointer-events-none"
             )}
           >
             {onSetting && (
-              <button
+              <ToolbarButton
                 onClick={onSetting}
-                className={cn(
-                  "p-1.5 rounded-md",
-                  "text-neutral-500 dark:text-neutral-400",
-                  "hover:bg-neutral-100 dark:hover:bg-neutral-700",
-                  "hover:text-neutral-700 dark:hover:text-neutral-200",
-                  "transition-colors"
-                )}
-              >
-                <Settings className="size-3.5" />
-              </button>
+                icon={Settings}
+                label="Settings"
+              />
             )}
-            <button
-              className={cn(
-                "p-1.5 rounded-md",
-                "text-neutral-500 dark:text-neutral-400",
-                "hover:bg-neutral-100 dark:hover:bg-neutral-700",
-                "hover:text-neutral-700 dark:hover:text-neutral-200",
-                "transition-colors"
-              )}
-            >
-              <MoreHorizontal className="size-3.5" />
-            </button>
-            {onDelete && (
-              <button
-                onClick={onDelete}
-                className={cn(
-                  "p-1.5 rounded-md",
-                  "text-neutral-500 dark:text-neutral-400",
-                  "hover:bg-red-100 dark:hover:bg-red-500/20",
-                  "hover:text-red-600 dark:hover:text-red-400",
-                  "transition-colors"
-                )}
-              >
-                <Trash2 className="size-3.5" />
-              </button>
+            {onDuplicate && (
+              <ToolbarButton
+                onClick={onDuplicate}
+                icon={Copy}
+                label="Duplicate"
+              />
             )}
+            <ToolbarButton
+              onClick={handleDelete}
+              icon={Trash2}
+              label="Delete"
+              variant="danger"
+            />
           </div>
         )}
 
-        {/* Header */}
-        <BaseNodeHeader className={styles.header}>
-          {Icon && (
-            <BaseNodeIcon className={styles.icon}>
-              <Icon className="size-3.5" />
-            </BaseNodeIcon>
+        {/* Card Container */}
+        <div
+          className={cn(
+            "w-64 overflow-hidden",
+            "bg-white dark:bg-neutral-900",
+            "border rounded-xl",
+            "transition-all duration-200 ease-out",
+            styles.card,
+            selected && styles.cardSelected,
+            !selected && "hover:shadow-md"
           )}
-          <BaseNodeHeaderTitle className={styles.title}>
-            {name}
-          </BaseNodeHeaderTitle>
-          {badge && (
-            <BaseNodeBadge variant={badgeVariant}>{badge}</BaseNodeBadge>
-          )}
-        </BaseNodeHeader>
+        >
+          {/* Header */}
+          <div
+            className={cn(
+              "flex items-center gap-3 px-3.5 py-3",
+              "border-b border-neutral-100 dark:border-neutral-800",
+              styles.header
+            )}
+          >
+            {/* Icon */}
+            {Icon && (
+              <div
+                className={cn(
+                  "flex items-center justify-center",
+                  "size-8 rounded-lg shrink-0",
+                  "transition-transform duration-200",
+                  styles.iconBg,
+                  styles.iconText,
+                  "group-hover:scale-105"
+                )}
+              >
+                <Icon className="size-4" />
+              </div>
+            )}
 
-        {/* Content */}
-        <BaseNodeContent>
-          {description && (
-            <p className={cn("text-xs", styles.description)}>{description}</p>
-          )}
-          {children}
-        </BaseNodeContent>
+            {/* Title & Badge */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h3
+                  className={cn("text-sm font-semibold truncate", styles.title)}
+                >
+                  {name}
+                </h3>
+                {badge && (
+                  <span
+                    className={cn(
+                      "inline-flex items-center px-1.5 py-0.5",
+                      "text-[10px] font-medium uppercase tracking-wide",
+                      "rounded-md shrink-0",
+                      styles.badge
+                    )}
+                  >
+                    {badge}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
 
-        {/* Input Handle */}
+          {/* Content */}
+          <div className="px-3.5 py-3">
+            {description && (
+              <p className={cn("text-xs leading-relaxed", styles.description)}>
+                {description}
+              </p>
+            )}
+            {children}
+          </div>
+        </div>
+
+        {/* Input Handle (Left) */}
         {hasInput && (
-          <Handle
+          <BaseHandle
             type="target"
-            position={Position.Top}
+            position={Position.Left}
             className={cn(
               "w-3! h-3! border-2! rounded-full!",
+              "-left-1.5!",
+              "transition-all duration-200",
               styles.handle,
-              "bg-white! dark:bg-neutral-900!",
-              "-top-1.5!",
-              "hover:scale-125! transition-transform!"
+              styles.handleHover,
+              "hover:scale-125!"
             )}
           />
         )}
 
-        {/* Output Handle */}
+        {/* Output Handle (Right) */}
         {hasOutput && (
-          <Handle
+          <BaseHandle
             type="source"
-            position={Position.Bottom}
+            position={Position.Right}
             className={cn(
               "w-3! h-3! border-2! rounded-full!",
+              "-right-1.5!",
+              "transition-all duration-200",
               styles.handle,
-              "bg-white! dark:bg-neutral-900!",
-              "-bottom-1.5!",
-              "hover:scale-125! transition-transform!"
+              styles.handleHover,
+              "hover:scale-125!"
             )}
           />
         )}
-      </BaseNode>
+      </div>
     );
   }
 );
