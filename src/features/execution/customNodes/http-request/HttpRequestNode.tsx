@@ -14,7 +14,7 @@ type HttpRequestNodeData = {
 
 type HttpRequestNodeProps = Node<HttpRequestNodeData>;
 
-const HttpRequestNode = memo((props: NodeProps) => {
+const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
   const NodeData = props.data as HttpRequestNodeData;
 
   const description = NodeData.endPontUrl
