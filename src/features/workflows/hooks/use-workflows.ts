@@ -171,3 +171,29 @@ export const useUpdateWorkflowNameAndDescription = () => {
     })
   );
 };
+
+// Update workNode and Save to database.
+
+export const useUpdateWorkflowNodes = () => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    trpc.workflows.updateWorkflowNodes .mutationOptions({
+      onSuccess: (data) => {
+        toast.success("Workflow nodes updated successfully");
+
+        // Update cached workflow details
+        queryClient.invalidateQueries(
+          trpc.workflows.getOne.queryOptions({ id: data.id })
+        );
+        // Refresh cached workflows list
+        queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}));
+         
+      },
+      onError: (error) => {
+        toast.error(`Error updating workflow nodes: ${error.message}`);
+      },
+    })
+  );
+};

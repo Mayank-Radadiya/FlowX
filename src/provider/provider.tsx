@@ -3,6 +3,7 @@
  * and toast notifications. Applies consistent styling for all toast messages.
  * NuqsAdapter is used to integrate Nuqs functionalities.
  * Nuqs is Type-safe search params state manager for React
+ * jotai Provider is used for global state management.
  */
 
 "use client";
@@ -10,6 +11,7 @@
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Provider as JotaiProvider } from "jotai";
 
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
@@ -39,8 +41,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
         }}
       />
       <NuqsAdapter>
-        {/* Render the app's content */}
-        {children}
+        <JotaiProvider>
+          {/* Render the app's content */}
+          {children}
+        </JotaiProvider>
       </NuqsAdapter>
     </ThemeProvider>
   );

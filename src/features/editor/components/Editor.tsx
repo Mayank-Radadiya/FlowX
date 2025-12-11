@@ -2,7 +2,7 @@
 
 import { useSuspenseWorkflowById } from "@/features/workflows/hooks/use-workflows";
 import { EditorHeader } from "./EditorHeader";
-import FlowCanvas from "./reactFlow/Node";
+import WorkflowNodeCanvas from "./reactFlow/WorkflowNodeCanvas";
 interface EditorProps {
   workflowId: string;
 }
@@ -16,12 +16,12 @@ const Editor = ({ workflowId }: EditorProps) => {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <EditorHeader workflowName={workflow.name} />
+      <EditorHeader workflowName={workflow.name} workflowId={workflowId} />
 
       {/* Editor Canvas */}
       <div className="flex-1 min-h-0 bg-neutral-50 dark:bg-neutral-950">
         {/* React Flow content */}
-        <FlowCanvas nodes={workflow.nodes} edges={workflow.edges} />
+        <WorkflowNodeCanvas nodes={workflow.nodes} edges={workflow.edges} />
       </div>
     </div>
   );

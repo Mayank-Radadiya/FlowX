@@ -13,18 +13,19 @@ import {
 } from "@/components/ui/breadcrumb";
 import { EditorSettings } from "./basicUi/EditorSettings";
 import { ToggleButton } from "@/components/global/ToggleButton";
+import { EditorSaveButton } from "./basicUi/EditorSaveButton";
 
 interface EditorHeaderProps {
   workflowName: string;
-  onSave?: () => void;
   onRun?: () => void;
   onUpdateDetails?: () => void;
+  workflowId: string;
 }
 
 export function EditorHeader({
   workflowName,
-  onSave,
   onRun,
+  workflowId,
 }: EditorHeaderProps) {
   return (
     <header className="flex h-12 shrink-0 items-center justify-between border-b bg-background/80 px-3">
@@ -55,10 +56,7 @@ export function EditorHeader({
         <ToggleButton />
         <EditorSettings />
         <div className="h-4 w-px bg-border" />
-        <Button variant="ghost" size="sm" onClick={onSave}>
-          <Save className="size-4" />
-          Save
-        </Button>
+        <EditorSaveButton workflowId={workflowId} />
         <Button size="sm" onClick={onRun} className="text-white">
           <Play className="size-4 " />
           Run

@@ -10,6 +10,7 @@
  *  - Deleting workflows
  *  - Fetching a single workflow
  *  - Paginated fetching of multiple workflows with search support
+ *  - Updating workflow nodes and connections by saving the entire graph data
  *
  * Prisma is used for all database operations, and each query ensures
  * that the authenticated user's ID is part of the filter conditions.
@@ -179,5 +180,133 @@ export const workflowRouter = createTRPCRouter({
         hasNextPage,
         hasPreviousPage,
       };
+    }),
+
+  /**
+   * updateWorkflowNodes Procedure
+   * --------------------------
+   * Saves the entire workflow graph structure:
+   *   - Nodes (positions, types, metadata)
+   *   - Edges (connections between nodes)
+   *
+   * This procedure replaces ALL existing nodes and edges for a workflow
+   * with the newly submitted ones. This ensures the database always
+   * reflects the latest full graph state from the client.
+   *
+   * Core Operations:
+   *   1. Validate user access to workflow
+   *   2. Remove all old nodes & edges
+   *   3. Insert new nodes
+   *   4. Insert new edges
+   *
+   * Everything runs inside a Prisma transaction for:
+   *   - Atomicity (either everything saves, or nothing saves)
+   *   - Data consistency across nodes/edges relations
+   */
+
+  //  Save Node and Connection Data
+  updateWorkflowNodes: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(), // workflow ID
+        nodes: z.array(
+          z.object({
+            id: z.string(),
+            type: z.string().nullish(),
+            position: z.object({
+              x: z.number(),
+              y: z.number(),
+            }),
+            data: z.record(z.string(), z.any()).optional(), // node-specific metadata
+          })
+        ),
+        edges: z.array(
+          z.object({
+            source: z.string(), // from node
+            target: z.string(), // to node
+            sourceHandle: z.string().nullish(), // output handle
+            targetHandle: z.string().nullish(), // input handle
+          })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, nodes, edges } = input;
+
+      /**
+       * Step 1: Validate workflow ownership
+       * -----------------------------------
+       * Ensure the workflow exists AND belongs to the authenticated user.
+       * If not found → throws automatically.
+       */
+      const workflow = await prisma.workflow.findFirstOrThrow({
+        where: {
+          id,
+          userId: ctx.auth.user.id,
+        },
+      });
+
+      /**
+       * Step 2: Begin transaction
+       * -------------------------
+       * Ensures:
+       *  - Old nodes & edges are removed
+       *  - New nodes & edges inserted
+       *  - If ANY part fails → rollback entire workflow update
+       */
+      return prisma.$transaction(async (tx) => {
+        // Delete all existing nodes & connections for this workflow
+        await tx.node.deleteMany({
+          where: { workflowId: workflow.id },
+        });
+
+        /**
+         * Step 3: Create new nodes
+         * ------------------------
+         * Node fields stored:
+         *   - id (ReactFlow ID)
+         *   - workflowId (FK)
+         *   - type (node category)
+         *   - position (x, y)
+         *   - data (custom metadata)
+         *
+         * If no type is provided → fallback to "UNNAMED".
+         */
+        await tx.node.createMany({
+          data: nodes.map((n) => ({
+            id: n.id,
+            workflowId: workflow.id,
+            name: n.type || "UNNAMED",
+            type: n.type as NodeType,
+            position: n.position,
+            data: n.data || {},
+          })),
+        });
+
+        /**
+         * Step 4: Create new connections (edges)
+         * --------------------------------------
+         * Edge fields stored:
+         *   - Composite ID: "source-target"
+         *   - workflowId
+         *   - formNodeId (source)
+         *   - toNodeId (target)
+         *   - handle names (output/input)
+         *
+         * If handles are missing → defaults to "main".
+         */
+        await tx.connection.createMany({
+          data: edges.map((e) => ({
+            workflowId: workflow.id,
+            formNodeId: e.source,
+            toNodeId: e.target,
+            fromOutput: e.sourceHandle || "main",
+            toInput: e.targetHandle || "main",
+          })),
+        });
+
+        // Return workflow info after saving graph state
+        return workflow;
+      });
     }),
 });

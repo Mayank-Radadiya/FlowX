@@ -21,18 +21,22 @@ import "@xyflow/react/dist/style.css";
 import { NODE_COMPONENTS } from "@/constants/node-component";
 import { cn } from "@/lib/utils";
 import AddNewNodeButton from "./Nodes/NodeSelector/AddNewNodeButton";
+import { useSetAtom } from "jotai";
+import { editorAtom } from "../../store/atom";
 
-interface FlowCanvasProps {
+interface WorkflowNodeCanvasProps {
   nodes: Node[];
   edges: Edge[];
 }
 
-const FlowCanvas = ({
+const WorkflowNodeCanvas = ({
   nodes: initialNodes,
   edges: initialEdges,
-}: FlowCanvasProps) => {
+}: WorkflowNodeCanvasProps) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
+
+  const setEditor = useSetAtom(editorAtom);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
@@ -65,6 +69,7 @@ const FlowCanvas = ({
         proOptions={{
           hideAttribution: true,
         }}
+        onInit={setEditor}
       >
         {/* Dot grid background - layered on top of particles */}
         <Background
@@ -94,4 +99,4 @@ const FlowCanvas = ({
   );
 };
 
-export default FlowCanvas;
+export default WorkflowNodeCanvas;

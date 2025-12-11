@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState, type ReactNode, type ComponentType } from "react";
-import { Position, useReactFlow } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import Image from "next/image";
 import { Settings, Trash2, Plus, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -451,6 +451,7 @@ const ImageNode = memo(
             {hasInput && (
               <BaseHandle
                 type="target"
+                id="input"
                 position={Position.Left}
                 className={cn(
                   "w-3! h-3! border-2! rounded-full!",
@@ -466,6 +467,7 @@ const ImageNode = memo(
             {hasOutput && (
               <BaseHandle
                 type="source"
+                id="output"
                 position={Position.Right}
                 className={cn(
                   "w-3! h-3! border-2! rounded-full!",

@@ -1,10 +1,10 @@
 "use client";
 
 import { memo, useState, type ReactNode, type ComponentType } from "react";
-import { Position, useReactFlow } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { Settings, Trash2, Copy, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { BaseHandle } from "@/components/ui/react-flow/base-handle";
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -127,15 +127,8 @@ const ToolbarButton = ({
     onClick={onClick}
     aria-label={label}
     className={cn(
-      "p-2 rounded-lg",
-      "bg-white dark:bg-neutral-800",
-      "border border-neutral-200 dark:border-neutral-700",
+      "p-1.5 rounded-md transition-colors",
       "text-neutral-500 dark:text-neutral-400",
-      "hover:bg-red-50 dark:hover:bg-red-500/10",
-      "hover:border-red-200 dark:hover:border-red-500/30",
-      "hover:text-red-600 dark:hover:text-red-400",
-      "shadow-sm hover:shadow-md",
-      "transition-all duration-200",
       variant === "default" && [
         "hover:bg-neutral-100 dark:hover:bg-neutral-700",
         "hover:text-neutral-700 dark:hover:text-neutral-200",
@@ -146,7 +139,7 @@ const ToolbarButton = ({
       ]
     )}
   >
-    <Icon className="size-4" />
+    <Icon className="size-3.5" />
   </button>
 );
 
@@ -194,7 +187,7 @@ const WorkFlowNode = memo(
           <div
             className={cn(
               "absolute -top-10 left-1/2 -translate-x-1/2 z-20",
-              "flex items-center gap-0.5 ",
+              "flex items-center gap-0.5 px-1.5 py-1",
               "bg-white dark:bg-neutral-800",
               "border border-neutral-200 dark:border-neutral-700",
               "rounded-lg shadow-xl shadow-black/10 dark:shadow-black/30",
@@ -300,7 +293,7 @@ const WorkFlowNode = memo(
 
         {/* Input Handle (Left) */}
         {hasInput && (
-          <BaseHandle
+          <Handle
             type="target"
             position={Position.Left}
             className={cn(
@@ -316,7 +309,7 @@ const WorkFlowNode = memo(
 
         {/* Output Handle (Right) */}
         {hasOutput && (
-          <BaseHandle
+          <Handle
             type="source"
             position={Position.Right}
             className={cn(
