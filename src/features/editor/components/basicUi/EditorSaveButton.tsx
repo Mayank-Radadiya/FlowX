@@ -45,24 +45,50 @@ export const EditorSaveButton = ({ workflowId }: EditorSaveButtonProps) => {
       onClick={handleSave}
       disabled={isLoading}
       className={cn(
-        "group flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg",
-        "transition-all duration-200",
-        "border shadow-sm",
-        "focus:outline-none focus:ring-2 focus:ring-offset-2",
+        // Base style
+        "relative flex items-center gap-2 px-4 py-1.5 w-24 rounded-xl text-sm font-medium",
+        "transition-all duration-300 border backdrop-blur-md",
+
+        // Border + background
+        "bg-white/60 dark:bg-neutral-900/40",
+        "border-neutral-300/60 dark:border-neutral-700/60",
+
+        // Hover
+        "hover:bg-white/80 dark:hover:bg-neutral-900/60",
+        "hover:border-neutral-400 dark:hover:border-neutral-600",
+
+        // Disabled
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        showSuccess
-          ? "bg-emerald-500 text-white border-emerald-500 shadow-emerald-500/25 focus:ring-emerald-400"
-          : "bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 focus:ring-violet-400"
+
+        // Success State
+        showSuccess &&
+          "bg-emerald-500/20 border-emerald-400/30 text-emerald-600 dark:text-emerald-400",
+
+        // Loading & normal state text color
+        !showSuccess && "text-neutral-700 dark:text-neutral-200 shadow-sm"
       )}
     >
+      {/* Icon */}
       {isLoading ? (
         <Loader2 className="size-4 animate-spin" />
       ) : showSuccess ? (
         <Check className="size-4" />
       ) : (
-        <Save className="size-4 transition-transform duration-200 group-hover:scale-110" />
+        <Save className="size-4 transition-transform duration-300 group-hover:scale-110" />
       )}
-      {isLoading ? "Saving..." : showSuccess ? "Saved!" : "Save"}
+
+      {/* Text */}
+      <span className="transition-opacity duration-200">
+        {isLoading ? "Saving..." : showSuccess ? "Saved" : "Save"}
+      </span>
+
+      {/* Glow on hover */}
+      <span
+        className={cn(
+          "absolute inset-0 rounded-xl pointer-events-none transition-all duration-300",
+          "group-hover:shadow-[0_0_25px_-5px_rgba(99,102,241,0.4)]"
+        )}
+      />
     </button>
   );
 };

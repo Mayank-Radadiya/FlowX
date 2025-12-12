@@ -53,8 +53,8 @@ export function EditorHeader({
 
       {/* Right - Actions */}
       <div className="flex items-center gap-1.5">
-        <ToggleButton />
-        <EditorSettings />
+        <ToggleButton className="size-7.5"/>
+        <EditorSettings workflowId={workflowId} />
         <div className="h-4 w-px bg-border" />
         <EditorSaveButton workflowId={workflowId} />
         <Button size="sm" onClick={onRun} className="text-white">

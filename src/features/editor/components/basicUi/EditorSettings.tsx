@@ -4,8 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings, FileText } from "lucide-react";
 import { EditDetailsDialog } from "./EditDetailsDialog";
+import { EditorDeleteButton } from "./EditorDeleteButton";
 
-export function EditorSettings() {
+interface EditorSettingsProps {
+  workflowId: string;
+}
+
+export function EditorSettings({ workflowId }: EditorSettingsProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -78,6 +83,8 @@ export function EditorSettings() {
               <FileText className="size-4 text-muted-foreground" />
               Edit Details
             </button>
+
+            <EditorDeleteButton workflowId={workflowId} />
           </div>
         )}
       </div>

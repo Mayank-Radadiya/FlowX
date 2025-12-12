@@ -125,10 +125,12 @@ export const useCreateWorkflow = () => {
 export const useRemoveWorkflow = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const route = useRouter();
 
   return useMutation(
     trpc.workflows.remove.mutationOptions({
       onSuccess: (data) => {
+        route.push("/workflow");
         toast.success(`Workflow "${data.name}" removed successfully`);
 
         // Refresh cached workflows list
@@ -179,7 +181,7 @@ export const useUpdateWorkflowNodes = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    trpc.workflows.updateWorkflowNodes .mutationOptions({
+    trpc.workflows.updateWorkflowNodes.mutationOptions({
       onSuccess: (data) => {
         toast.success("Workflow nodes updated successfully");
 
@@ -189,7 +191,6 @@ export const useUpdateWorkflowNodes = () => {
         );
         // Refresh cached workflows list
         queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}));
-         
       },
       onError: (error) => {
         toast.error(`Error updating workflow nodes: ${error.message}`);

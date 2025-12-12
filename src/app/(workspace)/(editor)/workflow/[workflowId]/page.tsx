@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { EditorError } from "@/features/editor/components/EditorError";
 import Editor from "@/features/editor/components/Editor";
+import { EditorLoader } from "@/features/editor/components/basicUi/EditorLoader";
 
 interface Props {
   params: Promise<{ workflowId: string }>;
@@ -20,7 +21,7 @@ async function page({ params }: Props) {
     <>
       <HydrateClient>
         <ErrorBoundary fallback={<EditorError />}>
-          <Suspense fallback={<div>Loading workflow...</div>}>
+          <Suspense fallback={<EditorLoader />}>
             {/* Workflow details component goes here */}
             <Editor workflowId={workflowId} />
           </Suspense>
