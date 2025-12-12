@@ -70,6 +70,9 @@ const WorkflowNodeCanvas = ({
           hideAttribution: true,
         }}
         onInit={setEditor}
+        panOnScroll
+        panOnDrag={false}
+        selectionOnDrag
       >
         {/* Dot grid background - layered on top of particles */}
         <Background

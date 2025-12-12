@@ -28,7 +28,7 @@ import {
   Sparkles,
   Type,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { useCreateWorkflow } from "@/features/workflows/hooks/use-workflows";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +37,7 @@ interface CreateWorkFlowDialogProps {
   triggerClassName?: string;
 }
 
-const CreateWorkFlowDialog = ({
+const CreateWorkFlowDialog = memo(({
   children,
   triggerClassName,
 }: CreateWorkFlowDialogProps) => {
@@ -215,6 +215,6 @@ const CreateWorkFlowDialog = ({
       </DialogPopup>
     </Dialog>
   );
-};
+});
 
 export default CreateWorkFlowDialog;

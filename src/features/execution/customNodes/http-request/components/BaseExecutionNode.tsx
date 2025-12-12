@@ -1,21 +1,23 @@
 "use client";
 
+import ImageNode from "@/features/editor/components/reactFlow/Nodes/ImageNode";
+import { NodeStatus } from "@/features/execution/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
 import { memo, type ReactNode } from "react";
-import ImageNode from "../../../editor/components/reactFlow/Nodes/ImageNode";
 
-interface BaseTriggerNodeProps extends NodeProps {
+interface BaseEductionNodeProps extends NodeProps {
   name?: string;
   description?: string;
-  //?  status?: NodeStatus;
+  status?: NodeStatus;
   children?: ReactNode;
   onSettings?: () => void;
   onDoubleClick: () => void;
   imageUrl?: string;
 }
 
-const BaseTriggerNode = memo(
+const BaseExecutionNode = memo(
   ({
+    id,
     name,
     imageUrl,
     description,
@@ -23,15 +25,15 @@ const BaseTriggerNode = memo(
     onSettings,
     onDoubleClick,
     selected,
-    id,
-  }: BaseTriggerNodeProps) => {
+    status = "default",
+  }: BaseEductionNodeProps) => {
     const { setNodes, setEdges } = useReactFlow();
-    
-    const handleDelete = () => {
 
+    const handleDelete = () => {
       setNodes((nds) => nds.filter((n) => n.id !== id));
       setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
     };
+
     return (
       <>
         <ImageNode
@@ -42,10 +44,10 @@ const BaseTriggerNode = memo(
           imageUrl={imageUrl}
           selected={selected}
           onDoubleClick={onDoubleClick}
-          hasInput={false}
+          color="pink"
+          status={status}
+          hasInput={true}
           hasOutput={true}
-          variant="indigo"
-          className="rounded-l-2xl"
         >
           {children}
         </ImageNode>
@@ -54,4 +56,4 @@ const BaseTriggerNode = memo(
   }
 );
 
-export default BaseTriggerNode;
+export default BaseExecutionNode;
