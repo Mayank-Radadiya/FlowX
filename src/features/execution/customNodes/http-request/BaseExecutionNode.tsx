@@ -1,6 +1,6 @@
 "use client";
 
-import { type NodeProps } from "@xyflow/react";
+import { useReactFlow, type NodeProps } from "@xyflow/react";
 import { memo, type ReactNode } from "react";
 import ImageNode from "../../../editor/components/reactFlow/Nodes/ImageNode";
 
@@ -16,6 +16,7 @@ interface BaseEductionNodeProps extends NodeProps {
 
 const BaseExecutionNode = memo(
   ({
+    id,
     name,
     imageUrl,
     description,
@@ -24,7 +25,13 @@ const BaseExecutionNode = memo(
     onDoubleClick,
     selected,
   }: BaseEductionNodeProps) => {
-    const handleDelete = () => {};
+    const { setNodes, setEdges } = useReactFlow();
+
+    const handleDelete = () => {
+      setNodes((nds) => nds.filter((n) => n.id !== id));
+      setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+    };
+
     return (
       <>
         <ImageNode
