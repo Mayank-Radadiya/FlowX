@@ -7,25 +7,13 @@
  *  - Authenticated users are redirected away from the sign-in page
  *  - Unauthenticated users are allowed to access the sign-in form
  *
- * Authentication checks are executed on the server
+ * Authentication checks are executed on the server from AuthLayout
  * before any client-side UI is rendered.
  */
 
-import { requiredUnAuth } from "@/features/auth/server/guards";
-import SignInForm from "../../../features/auth/client/components/SignInForm";
+import SignInForm from "@/features/auth/client/components/SignInForm";
 
-const Page = async () => {
-  /**
-   * requiredUnAuth
-   * --------------
-   * Server-side guard that:
-   *  - Checks if a valid session exists
-   *  - Redirects authenticated users to the home page
-   *
-   * This prevents logged-in users from accessing auth pages.
-   */
-  await requiredUnAuth();
-
+const Page = () => {
   return (
     <>
       {/* Client-side sign-in form UI */}

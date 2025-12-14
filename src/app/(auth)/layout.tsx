@@ -13,12 +13,14 @@
  */
 
 import AuthLayoutStructure from "@/features/auth/client/components/AuthLayout";
+import { requiredUnAuth } from "@/features/auth/server/guards";
 
 interface AuthLayoutProps {
   children: React.ReactNode; // Auth page content rendered inside the layout
 }
 
-const AuthLayout = ({ children }: AuthLayoutProps) => {
+const AuthLayout = async ({ children }: AuthLayoutProps) => {
+  await requiredUnAuth();
   return (
     <>
       {/* Shared authentication layout structure */}
