@@ -26,7 +26,6 @@ const Page = async () => {
    * from accidentally creating duplicate accounts.
    */
   await requiredUnAuth();
-
   return (
     <>
       {/* Client-side sign-up form UI */}
