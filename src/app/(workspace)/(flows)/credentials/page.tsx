@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/global/main/PageHeader/PageHeader";
-import { requiredAuth } from "@/lib/auth-utils";
+import { requiredAuth } from "@/features/auth/server/guards";
 import { KeyRound } from "lucide-react";
 import { HeroSection } from "./_components/HeroSection";
 

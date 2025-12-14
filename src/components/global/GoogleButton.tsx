@@ -5,19 +5,14 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
   onClick?: () => void;
-  label?: string;
 };
 
-export default function GoogleButton({
-  onClick,
-  label = "Continue with Google",
-}: Props) {
+export default function GoogleButton({ onClick }: Props) {
   return (
     <Button
       variant="outline"
       size="lg"
       onClick={onClick}
-      aria-label={label}
       className="
         w-full p-0 overflow-hidden rounded-md shadow-sm hover:shadow-md transition-transform hover:-translate-y-05"
     >
@@ -35,7 +30,7 @@ export default function GoogleButton({
 
         {/* Label */}
         <span className="flex-1 text-center text-sm font-medium px-4 font-sans">
-          {label}
+          Continue with Google
         </span>
 
         {/* Arrow Icon */}
