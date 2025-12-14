@@ -1,3 +1,19 @@
+/**
+ * SidebarNav Component
+ * -------------------
+ * Groups and renders a set of sidebar navigation links,
+ * optionally displaying a section title.
+ *
+ * Responsibilities:
+ *  - Organize related sidebar links into logical sections
+ *  - Conditionally render a section title
+ *  - Animate title appearance and disappearance
+ *  - React to sidebar open/collapsed state
+ *
+ * This component improves navigation clarity while keeping
+ * the sidebar compact when collapsed.
+ */
+
 "use client";
 
 import type { ReactNode } from "react";
@@ -5,44 +21,50 @@ import { AnimatePresence, motion } from "motion/react";
 import { useSidebar } from "./SidebarContext";
 
 interface SidebarNavProps {
-  title?: string;
-  children: ReactNode;
+  title?: string; // Optional section heading
+  children: ReactNode; // SidebarLink components
 }
 
 export const SidebarNav = ({ title, children }: SidebarNavProps) => {
+  /**
+   * Sidebar context state
+   * ---------------------
+   * open    → whether sidebar is expanded
+   * animate → whether sidebar animations are enabled
+   */
   const { open, animate } = useSidebar();
-  const showTitle = title && (!animate || open);
+
+  /**
+   * Title visibility logic
+   * ----------------------
+   * The title is shown only when:
+   *  - A title is provided
+   *  - Sidebar is open OR animations are disabled
+   */
+  const showTitle = Boolean(title && (!animate || open));
 
   return (
-    <motion.div
-      className="flex flex-col gap-2"
-      initial={false}
-      animate={{ opacity: 1 }}
-    >
-      <AnimatePresence mode="wait">
+    <div className="flex flex-col gap-2">
+      {/* Section title with enter/exit animation */}
+      <AnimatePresence initial={false}>
         {showTitle && (
           <motion.div
-            initial={{ opacity: 0, x: -20, height: 0 }}
-            animate={{ opacity: 1, x: 0, height: "auto" }}
-            exit={{ opacity: 0, x: -20, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden"
+            initial={{ opacity: 0, x: -8 }} // Slide in from left
+            animate={{ opacity: 1, x: 0 }} // Fully visible
+            exit={{ opacity: 0, x: -8 }} // Slide out on collapse
+            transition={{ duration: 0.2 }}
           >
-            <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 flex items-center gap-2">
-              <motion.span
-                className="h-px flex-1 max-w-4 bg-neutral-300 dark:bg-neutral-700"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              />
+            <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+              {/* Decorative divider line */}
+              <span className="h-px w-4 bg-border" />
               {title}
             </span>
           </motion.div>
         )}
       </AnimatePresence>
-      <motion.div className="flex flex-col gap-1" initial={false}>
-        {children}
-      </motion.div>
-    </motion.div>
+
+      {/* Navigation links container */}
+      <div className="flex flex-col gap-1">{children}</div>
+    </div>
   );
 };

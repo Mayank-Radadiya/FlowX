@@ -1,3 +1,17 @@
+/**
+ * SidebarBody Component
+ * --------------------
+ * Responsive wrapper that renders the appropriate sidebar
+ * implementation based on screen size.
+ *
+ * This component:
+ *  - Renders DesktopSidebar for larger screens
+ *  - Renders MobileSidebar for smaller screens
+ *  - Shares the same children and animation props across both
+ *
+ * It acts as a layout bridge between desktop and mobile sidebar variants.
+ */
+
 "use client";
 
 import type { ReactNode } from "react";
@@ -14,9 +28,12 @@ export const SidebarBody = (
 
   return (
     <>
+      {/* Desktop sidebar (visible on medium and larger screens) */}
       <DesktopSidebar {...(rest as React.ComponentProps<typeof motion.aside>)}>
         {children}
       </DesktopSidebar>
+
+      {/* Mobile sidebar (visible on small screens) */}
       <MobileSidebar {...(rest as React.ComponentProps<"div">)}>
         {children}
       </MobileSidebar>

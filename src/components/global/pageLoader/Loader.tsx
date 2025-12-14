@@ -11,7 +11,7 @@ export const PageLoader: React.FC<LoaderProps> = ({
   message = "Loading...",
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen gap-4">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <div className="relative animate-pulse">
         <Image
           src="/logo.svg"

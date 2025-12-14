@@ -1,138 +1,115 @@
+/**
+ * SidebarUser Component
+ * --------------------
+ * Displays the authenticated user's profile summary inside the sidebar.
+ *
+ * Responsibilities:
+ *  - Render user avatar with graceful fallback
+ *  - Show user name and email when sidebar is expanded
+ *  - Provide a logout action with visual feedback
+ *  - Adapt layout and animations based on sidebar state
+ *
+ * This component is memoized to reduce unnecessary re-renders.
+ */
+
 "use client";
 
-import type { ReactNode } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { memo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { LogOut } from "lucide-react";
+import { User } from "@prisma/client";
 import { useSidebar } from "./SidebarContext";
 
 interface SidebarUserProps {
-  name: string;
-  email: string;
-  avatar?: ReactNode;
-  onLogout?: () => void;
+  name: string | null;
+  email: string | null;
+  image: string | null;
+  onLogout: () => void;
 }
 
-export const SidebarUser = ({
+export const SidebarUser = memo(function SidebarUser({
   name,
   email,
-  avatar,
+  image,
   onLogout,
-}: SidebarUserProps) => {
+}: SidebarUserProps) {
+  /**
+   * Sidebar context state
+   * ---------------------
+   * open    → sidebar expanded
+   * animate → whether animations are enabled
+   */
   const { open, animate } = useSidebar();
+
+  /**
+   * Determines whether user details should be visible.
+   * - Always visible when animations are disabled
+   * - Visible only when sidebar is expanded otherwise
+   */
   const showInfo = !animate || open;
+
+  /**
+   * Avatar fallback logic
+   * ---------------------
+   * Uses the first letter of the user's name.
+   * Defaults to "U" if name is unavailable.
+   */
+  const avatarFallback = name?.charAt(0)?.toUpperCase() ?? "U";
 
   return (
     <motion.div
-      className="relative flex items-center gap-3 rounded-xl border border-neutral-200/50 bg-linear-to-br from-neutral-50 to-neutral-100/50 px-1 py-3 dark:border-neutral-800/50 dark:from-neutral-900 dark:to-neutral-900/50 overflow-hidden"
-      initial={false}
-      whileHover={{
-        scale: 1.02,
-        boxShadow: "0 10px 40px -15px rgba(0,0,0,0.15)",
-      }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      layout
+      className="relative flex items-center gap-3 rounded-xl border border-neutral-200/60 bg-background px-2 py-2 dark:border-neutral-800"
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
-      {/* Animated background gradient */}
+      {/* Avatar */}
       <motion.div
-        className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-primary/5 -z-10"
-        animate={{
-          x: ["-100%", "100%"],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
-
-      {/* User Avatar with pulse effect */}
-      <motion.div
-        className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground shadow-md ring-2 ring-background overflow-hidden"
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white"
+        whileHover={{ scale: 1.08 }}
+        transition={{ type: "spring", stiffness: 300 }}
       >
-        {/* Avatar shimmer */}
-        <motion.div
-          className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -skew-x-12"
-          initial={{ x: "-100%" }}
-          animate={{ x: "200%" }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatDelay: 4,
-            ease: "easeInOut",
-          }}
-        />
-
-        {avatar ?? (
-          <motion.span
-            className="text-sm font-semibold text-white uppercase relative z-10"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-          >
-            {name.charAt(0)}
-          </motion.span>
+        {image ? (
+          <img
+            src={image}
+            alt={name ?? "User"}
+            className="h-full w-full rounded-full object-cover"
+          />
+        ) : (
+          avatarFallback
         )}
-
-        {/* Online indicator with pulse */}
-        <motion.div
-          className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-green-500 border-2 border-background"
-          animate={{
-            scale: [1, 1.2, 1],
-            boxShadow: [
-              "0 0 0 0 rgba(34, 197, 94, 0.4)",
-              "0 0 0 4px rgba(34, 197, 94, 0)",
-              "0 0 0 0 rgba(34, 197, 94, 0)",
-            ],
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
       </motion.div>
 
-      {/* User Info */}
-      <motion.div
-        className="flex-1 overflow-hidden"
-        initial={false}
-        animate={{
-          width: showInfo ? "auto" : 0,
-          opacity: showInfo ? 1 : 0,
-          x: showInfo ? 0 : -10,
-        }}
-        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      >
-        <motion.p
-          className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 truncate"
-          initial={false}
-          animate={{ y: showInfo ? 0 : 5 }}
-          transition={{ duration: 0.25, delay: 0.05 }}
-        >
-          {name}
-        </motion.p>
-        <motion.p
-          className="text-xs text-neutral-500 dark:text-neutral-400 truncate"
-          initial={false}
-          animate={{ y: showInfo ? 0 : 5, opacity: showInfo ? 1 : 0 }}
-          transition={{ duration: 0.25, delay: 0.1 }}
-        >
-          {email}
-        </motion.p>
-      </motion.div>
+      {/* User Information (name & email) */}
+      <AnimatePresence initial={false}>
+        {showInfo && (
+          <motion.div
+            key="info"
+            className="flex-1 overflow-hidden"
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -6 }}
+            transition={{ duration: 0.2 }}
+          >
+            <p className="text-sm font-medium truncate">{name ?? "User"}</p>
+            <p className="text-xs text-muted-foreground truncate">{email}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Logout Button */}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {showInfo && (
           <motion.button
-            initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
-            whileHover={{
-              scale: 1.1,
-              backgroundColor: "rgba(239, 68, 68, 0.1)",
-            }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            key="logout"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15 }}
             onClick={onLogout}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors "
+            className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
             title="Logout"
           >
             <LogOut size={16} />
@@ -141,4 +118,4 @@ export const SidebarUser = ({
       </AnimatePresence>
     </motion.div>
   );
-};
+});

@@ -1,53 +1,50 @@
+/**
+ * Sidebar Component
+ * -----------------
+ * Composes the complete application sidebar by assembling
+ * all sidebar building blocks together.
+ *
+ * Responsibilities:
+ *  - Render the sidebar layout (header, navigation, footer)
+ *  - Map navigation configuration into sidebar links
+ *  - Integrate upgrade CTA and user account section
+ *
+ * This component acts as the final composition layer
+ * for the sidebar system.
+ */
+
 "use client";
 
-import { authClient } from "@/features/auth/client/lib/auth-client";
 import {
   SidebarBody,
-  SidebarBrand,
+  SidebarHeader,
   SidebarFooter,
   SidebarLink,
   SidebarNav,
-  SidebarUser,
   UpgradeProButton,
   NAV_ITEMS,
+  SidebarUserContainer,
 } from "./components";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 function Sidebar() {
-  const router = useRouter();
-  const { data } = authClient.useSession();
-  const logOut = () => {
-    authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          toast.success("Successfully logged out");
-          router.push("/sign-in");
-        },
-      },
-    });
-  };
+  console.log("render");
 
   return (
     <SidebarBody>
-      <SidebarBrand />
+      {/* Top branding section */}
+      <SidebarHeader />
 
+      {/* Main navigation section */}
       <SidebarNav title="Main">
         {NAV_ITEMS.map((item) => (
           <SidebarLink key={item.href} {...item} />
         ))}
       </SidebarNav>
 
+      {/* Footer actions */}
       <SidebarFooter>
         <UpgradeProButton />
-        <SidebarUser
-          name={data?.user.name || "Jon Doe"}
-          email={data?.user.email || "jon123@gmail.com"}
-          avatar={
-            data?.user.image || data?.user.name?.charAt(0).toUpperCase() || "J"
-          }
-          onLogout={() => logOut()}
-        />
+        <SidebarUserContainer />
       </SidebarFooter>
     </SidebarBody>
   );

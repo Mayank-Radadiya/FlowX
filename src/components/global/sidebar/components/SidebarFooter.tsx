@@ -1,3 +1,17 @@
+/**
+ * SidebarFooter Component
+ * ----------------------
+ * Renders the footer section of the sidebar.
+ *
+ * Responsibilities:
+ *  - Display persistent footer content at the bottom of the sidebar
+ *  - Provide a theme toggle control
+ *  - Adapt its layout and animations based on sidebar open state
+ *
+ * This component reacts to sidebar context state to ensure
+ * smooth UX when the sidebar is collapsed or expanded.
+ */
+
 "use client";
 
 import type { ReactNode } from "react";
@@ -12,7 +26,20 @@ interface SidebarFooterProps {
 }
 
 export const SidebarFooter = ({ children, className }: SidebarFooterProps) => {
+  /**
+   * Sidebar state
+   * -------------
+   * open    → whether sidebar is expanded
+   * animate → whether width animations are enabled
+   */
   const { open, animate } = useSidebar();
+
+  /**
+   * Toggle label visibility
+   * -----------------------
+   * - If animations are disabled → always show label
+   * - If animations are enabled → show only when sidebar is open
+   */
   const showToggle = !animate || open;
 
   return (
@@ -23,11 +50,12 @@ export const SidebarFooter = ({ children, className }: SidebarFooterProps) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
+        {/* Theme toggle container */}
         <motion.div
           className="relative flex items-center justify-center gap-3 pt-3 "
           initial={false}
         >
-          {/* Animated border line */}
+          {/* Animated horizontal divider */}
           <motion.div
             className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"
             initial={{ scaleX: 0 }}
@@ -35,14 +63,17 @@ export const SidebarFooter = ({ children, className }: SidebarFooterProps) => {
             transition={{ duration: 0.5, delay: 0.2 }}
           />
 
+          {/* Theme toggle button with interaction feedback */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            className="ml-2"
           >
             <ToggleButton />
           </motion.div>
 
+          {/* Theme label text */}
           <motion.span
             className="text-sm font-medium text-neutral-500 dark:text-neutral-400 whitespace-nowrap"
             initial={false}
@@ -56,6 +87,8 @@ export const SidebarFooter = ({ children, className }: SidebarFooterProps) => {
             Change Theme
           </motion.span>
         </motion.div>
+
+        {/* Additional footer content (user info, actions, etc.) */}
         {children}
       </motion.div>
     </>
