@@ -7,7 +7,7 @@ interface ContainerHeaderProps {
   icon?: React.ReactNode;
 }
 
-export const ContainerHeader = ({ title, icon }: ContainerHeaderProps) => {
+export function ContainerHeader({ title, icon }: ContainerHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between font-mono">
       <div className="flex min-w-0 items-center gap-3">
@@ -24,4 +24,4 @@ export const ContainerHeader = ({ title, icon }: ContainerHeaderProps) => {
       </div>
     </div>
   );
-};
+}

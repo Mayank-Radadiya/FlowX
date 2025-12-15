@@ -1,10 +1,11 @@
-import { Loader } from "@/components/global/Loader";
+"use client";
+
+import { PageLoader } from "@/components/global/pageLoader/Loader";
 
 export default function Loading() {
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center gap-6">
-      <h1 className="text-xl font-mono"> Loading workflow...</h1>
-      <Loader />
+    <div className="flex items-center justify-center z-50 pt-100">
+      <PageLoader message="Loading Workflows" />
     </div>
   );
 }

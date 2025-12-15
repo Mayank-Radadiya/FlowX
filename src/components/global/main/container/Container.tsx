@@ -14,7 +14,15 @@ interface ContainerProps {
   variant?: "default" | "card" | "glass" | "transparent";
 }
 
-export const Container = ({
+const variantStyles = {
+  default: "bg-card/80 border border-border/40 shadow-sm backdrop-blur-sm",
+  card: "bg-card border border-border shadow-md",
+  glass:
+    "bg-background/60 border border-white/10 dark:border-white/5 backdrop-blur-xl shadow-xl",
+  transparent: "bg-transparent border-none",
+};
+
+export function Container({
   children,
   header,
   search,
@@ -22,15 +30,7 @@ export const Container = ({
   className,
   contentClassName,
   variant = "default",
-}: ContainerProps) => {
-  const variantStyles = {
-    default: "bg-card/80 border border-border/40 shadow-sm backdrop-blur-sm",
-    card: "bg-card border border-border shadow-md",
-    glass:
-      "bg-background/60 border border-white/10 dark:border-white/5 backdrop-blur-xl shadow-xl",
-    transparent: "bg-transparent border-none",
-  };
-
+}: ContainerProps) {
   return (
     <div
       className={cn(
@@ -66,4 +66,4 @@ export const Container = ({
       )}
     </div>
   );
-};
+}

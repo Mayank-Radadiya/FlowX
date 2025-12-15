@@ -7,12 +7,12 @@ interface ContainerGridProps {
   withBackground?: boolean;
 }
 
-export const ContainerGrid = ({
+export function ContainerGrid({
   children,
   columns = 3,
   className,
   withBackground = false,
-}: ContainerGridProps) => {
+}: ContainerGridProps) {
   const columnStyles = {
     1: "grid-cols-1",
     2: "grid-cols-1 sm:grid-cols-2",
@@ -48,4 +48,4 @@ export const ContainerGrid = ({
       {children}
     </div>
   );
-};
+}

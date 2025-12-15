@@ -27,8 +27,6 @@ import {
 } from "./components";
 
 function Sidebar() {
-  console.log("render");
-
   return (
     <SidebarBody>
       {/* Top branding section */}

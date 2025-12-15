@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/global/main/PageHeader/PageHeader";
+import { PageHeader } from "@/components/global/PageHeader/PageHeader";
 import { requiredAuth } from "@/features/auth/server/guards";
 import { Activity } from "lucide-react";
 import { HeroSection } from "./_components/HeroSection";

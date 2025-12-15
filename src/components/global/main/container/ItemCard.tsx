@@ -19,9 +19,9 @@ interface ItemCardProps {
 }
 
 // Format date to relative time (e.g., "2 days ago", "just now")
-const formatRelativeTime = (date: Date | string): string => {
+function formatRelativeTime(date: Date | string): string {
   return formatDistanceToNow(new Date(date), { addSuffix: true });
-};
+}
 
 // Glassmorphism badge variants
 const badgeVariants = {
@@ -62,7 +62,7 @@ const iconGradients = {
   none: "from-black/10 to-black/5 dark:from-white/20 dark:to-white/10",
 };
 
-export const ItemCard = ({
+export function ItemCard({
   title,
   description,
   icon,
@@ -72,7 +72,7 @@ export const ItemCard = ({
   createdAt,
   className,
   gradient = "none",
-}: ItemCardProps) => {
+}: ItemCardProps) {
   const isInteractive = !!(href || onClick);
 
   const cardClasses = cn(
@@ -188,4 +188,4 @@ export const ItemCard = ({
   }
 
   return <div className={cardClasses}>{cardContent}</div>;
-};
+}
