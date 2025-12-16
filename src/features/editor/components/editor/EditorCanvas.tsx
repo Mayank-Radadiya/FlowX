@@ -20,19 +20,19 @@ import {
 import "@xyflow/react/dist/style.css";
 import { NODE_COMPONENTS } from "@/constants/node-component";
 import { cn } from "@/lib/utils";
-import AddNewNodeButton from "./Nodes/NodeSelector/AddNewNodeButton";
+import AddNewNodeButton from "../reactFlow/Nodes/NodeSelector/AddNewNodeButton";
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../../store/atom";
 
-interface WorkflowNodeCanvasProps {
+interface EditorCanvasProps {
   nodes: Node[];
   edges: Edge[];
 }
 
-const WorkflowNodeCanvas = ({
+const EditorCanvas = ({
   nodes: initialNodes,
   edges: initialEdges,
-}: WorkflowNodeCanvasProps) => {
+}: EditorCanvasProps) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
 
@@ -102,4 +102,4 @@ const WorkflowNodeCanvas = ({
   );
 };
 
-export default WorkflowNodeCanvas;
+export default EditorCanvas;
