@@ -33,7 +33,6 @@ const AuthLayoutStructure = ({ children }: AuthLayoutProps) => {
     <>
       {/* Root container: full-screen, centered layout */}
       <div className="flex min-h-screen flex-col items-center justify-center bg-background relative overflow-hidden">
-
         {/* Animated meteor background layer (visual only) */}
         <div className="absolute h-full w-full inset-0 overflow-hidden pointer-events-none z-20">
           <Meteors />
@@ -66,9 +65,9 @@ const AuthLayoutStructure = ({ children }: AuthLayoutProps) => {
 
         {/* Brand/logo section with entrance animation */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}     // Start slightly hidden and lower
-          animate={{ opacity: 1, y: 0 }}      // Animate into view
-          transition={{ duration: 0.5 }}      // Smooth transition
+          initial={{ opacity: 0, y: 20 }} // Start slightly hidden and lower
+          animate={{ opacity: 1, y: 0 }} // Animate into view
+          transition={{ duration: 0.5 }} // Smooth transition
           className="mb-8 z-10"
         >
           <Link
@@ -102,7 +101,12 @@ const AuthLayoutStructure = ({ children }: AuthLayoutProps) => {
         {children}
 
         {/* Legal disclaimer */}
-        <div className="max-w-md mx-auto px-4 z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} // Start slightly hidden and lower
+          animate={{ opacity: 1, y: 0 }} // Animate into view
+          transition={{ duration: 0.5, delay: 2 }} // Slight delay after logo
+          className="max-w-md mx-auto px-4 z-10"
+        >
           <p className="text-center text-xs text-muted-foreground mt-6">
             By signing in, you agree to our{" "}
             <Link
@@ -119,7 +123,7 @@ const AuthLayoutStructure = ({ children }: AuthLayoutProps) => {
               Privacy Policy
             </Link>
           </p>
-        </div>
+        </motion.div>
       </div>
     </>
   );
