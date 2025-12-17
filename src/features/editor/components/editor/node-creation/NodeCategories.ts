@@ -1,0 +1,82 @@
+/**
+ * NODE_CATEGORIES
+ * ----------------
+ * Defines the available node categories and their node options
+ * for the workflow editor’s node catalog.
+ *
+ * This file is purely **configuration-driven**:
+ * - No UI logic
+ * - No editor state
+ * - No side effects
+ *
+ * Its role is to act as a **single source of truth** for:
+ * - How nodes are grouped (categories)
+ * - How they are labeled and described
+ * - Which Prisma NodeType they map to
+ * - Which icon is shown in the UI
+ */
+
+import { NodeType } from "@prisma/client";
+import { GlobeIcon, MousePointer, Workflow, Zap } from "lucide-react";
+
+/**
+ * NODE_CATEGORIES structure
+ * ------------------------
+ * Each category represents a logical group of nodes
+ * displayed inside the NodeCatalog UI.
+ *
+ * Category fields:
+ * - id: Stable identifier (used as React key / filtering)
+ * - label: Display name shown in the UI
+ * - description: Short helper text under the label
+ * - icon: Category-level icon
+ * - nodes: List of node definitions belonging to this category
+ *
+ * Node fields:
+ * - type: Prisma-backed NodeType (used by editor + backend)
+ * - label: Human-readable name
+ * - description: Short explanation of the node’s purpose
+ * - icon: Icon rendered in the node picker
+ */
+export const NODE_CATEGORIES = [
+  {
+    id: "triggers",
+    label: "Triggers",
+    description: "Start your workflow",
+    icon: Zap,
+    nodes: [
+      {
+        /**
+         * Manual Trigger Node
+         * -------------------
+         * Entry point for workflows that are started explicitly
+         * by the user (e.g., clicking a button).
+         */
+        type: NodeType.MANUAL_TRIGGER,
+        label: "Manual Trigger",
+        description: "Start the flow manually",
+        icon: MousePointer,
+      },
+    ],
+  },
+  {
+    id: "actions",
+    label: "Actions",
+    description: "Perform operations",
+    icon: Workflow,
+    nodes: [
+      {
+        /**
+         * HTTP Request Node
+         * -----------------
+         * Allows workflows to interact with external services
+         * by making REST / API calls.
+         */
+        type: NodeType.HTTP_REQUEST,
+        label: "HTTP Request",
+        description: "Make API calls",
+        icon: GlobeIcon,
+      },
+    ],
+  },
+];

@@ -1,6 +1,6 @@
 "use client";
 
-import ImageNode from "@/features/editor/components/reactFlow/Nodes/ImageNode";
+import BaseVisualNode from "@/features/editor/components/reactFlow/Nodes/base/BaseVisualNode";
 import { NodeStatus } from "@/features/execution/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
 import { memo, type ReactNode } from "react";
@@ -36,7 +36,7 @@ const BaseTriggerNode = memo(
 
     return (
       <>
-        <ImageNode
+        <BaseVisualNode
           name={name}
           description={description}
           onSetting={onSettings}
@@ -51,7 +51,7 @@ const BaseTriggerNode = memo(
           status={status}
         >
           {children}
-        </ImageNode>
+        </BaseVisualNode>
       </>
     );
   }

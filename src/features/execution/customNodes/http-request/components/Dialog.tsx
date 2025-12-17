@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Dialog,
   DialogDescription,
@@ -11,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { FileText, Globe, Server, Code } from "lucide-react";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,21 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { httpRequestSchema } from "./http-request.schema";
 
-// ---------------------------------------------------------
-// Form Schema
-// ---------------------------------------------------------
-const formSchema = z.object({
-  endpointUrl: z.url(
-    "Please enter a valid URL (example: https://api.example.com/users)"
-  ),
-  method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
-  body: z.string().optional(),
-});
-
-type HttpRequestFormValues = z.infer<typeof formSchema>;
+type HttpRequestFormValues = z.infer<typeof httpRequestSchema>;
 
 // ---------------------------------------------------------
 // Component
@@ -61,7 +50,7 @@ export const HttpRequestDialog = memo(
     defaultMethod = "GET",
   }: HttpRequestDialogProps) => {
     const form = useForm<HttpRequestFormValues>({
-      resolver: zodResolver(formSchema),
+      resolver: zodResolver(httpRequestSchema),
       defaultValues: {
         endpointUrl: defaultEndpointUrl,
         method: defaultMethod,
@@ -70,12 +59,17 @@ export const HttpRequestDialog = memo(
     });
 
     const watchMethod = form.watch("method");
-    const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMethod);
+    const METHODS_WITH_BODY = new Set(["POST", "PUT", "PATCH"]);
 
-    const handleSubmit = (data: HttpRequestFormValues) => {
-      onSubmit(data);
-      setOpen(false);
-    };
+    const showBodyField = METHODS_WITH_BODY.has(watchMethod);
+
+    const handleSubmit = useCallback(
+      (data: HttpRequestFormValues) => {
+        onSubmit(data);
+        setOpen(false);
+      },
+      [onSubmit, setOpen]
+    );
 
     useEffect(() => {
       if (open) {
@@ -154,27 +148,24 @@ export const HttpRequestDialog = memo(
                 Method
               </Label>
 
-              <Select
-                onValueChange={(value) =>
-                  form.setValue(
-                    "method",
-                    value as HttpRequestFormValues["method"]
-                  )
-                }
-                defaultValue={defaultMethod}
-              >
-                <SelectTrigger className="h-11 rounded-xl border-neutral-300 dark:border-neutral-700">
-                  <SelectValue placeholder="Choose method" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectItem value="GET">GET</SelectItem>
-                  <SelectItem value="POST">POST</SelectItem>
-                  <SelectItem value="PUT">PUT</SelectItem>
-                  <SelectItem value="DELETE">DELETE</SelectItem>
-                  <SelectItem value="PATCH">PATCH</SelectItem>
-                </SelectContent>
-              </Select>
+              <Controller
+                control={form.control}
+                name="method"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="h-11 rounded-xl">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="GET">GET</SelectItem>
+                      <SelectItem value="POST">POST</SelectItem>
+                      <SelectItem value="PUT">PUT</SelectItem>
+                      <SelectItem value="DELETE">DELETE</SelectItem>
+                      <SelectItem value="PATCH">PATCH</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
 
             <DialogDescription>
@@ -227,5 +218,3 @@ export const HttpRequestDialog = memo(
     );
   }
 );
-
-HttpRequestDialog.displayName = "HttpRequestDialog";

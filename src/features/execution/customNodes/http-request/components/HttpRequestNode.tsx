@@ -2,8 +2,8 @@
 
 import { type NodeProps, type Node, useReactFlow } from "@xyflow/react";
 import { memo, useState } from "react";
-import BaseExecutionNode from "./components/BaseExecutionNode";
-import { HttpRequestDialog } from "./components/Dialog";
+import { HttpRequestDialog } from "./Dialog";
+import BaseExecutionNode from "./BaseExecutionNode";
 
 type HttpRequestNodeData = {
   endPontUrl: string;
@@ -43,7 +43,7 @@ const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
               method: values.method,
               body: values.body,
             },
-          }; 
+          };
         }
         return node;
       })
@@ -70,7 +70,5 @@ const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
     </>
   );
 });
-
-HttpRequestNode.displayName = "HttpRequestNode";
 
 export default HttpRequestNode;

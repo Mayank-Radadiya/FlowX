@@ -20,9 +20,9 @@ import {
 import "@xyflow/react/dist/style.css";
 import { NODE_COMPONENTS } from "@/constants/node-component";
 import { cn } from "@/lib/utils";
-import AddNewNodeButton from "../reactFlow/Nodes/NodeSelector/AddNewNodeButton";
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../../store/atom";
+import AddNewNodeButton from "./node-creation/AddNewNodeButton";
 
 interface EditorCanvasProps {
   nodes: Node[];

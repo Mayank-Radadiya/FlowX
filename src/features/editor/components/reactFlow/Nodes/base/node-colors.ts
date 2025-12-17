@@ -1,0 +1,48 @@
+// Color design variants
+export const colorVariants = {
+  default: {
+    border: "border-neutral-300 dark:border-neutral-600",
+    bg: "bg-neutral-50/50 dark:bg-neutral-800/50",
+    bgHover: "hover:bg-neutral-100/50 dark:hover:bg-neutral-700/50",
+    icon: "text-neutral-400 dark:text-neutral-500",
+    iconSelected: "text-neutral-600 dark:text-neutral-300",
+    handle: "border-neutral-400! dark:border-neutral-500!",
+    handleSelected: "border-neutral-500! dark:border-neutral-400!",
+    title: "text-neutral-700 dark:text-neutral-300",
+    titleSelected: "text-neutral-900 dark:text-neutral-100",
+  },
+  blue: {
+    border: "border-blue-300 dark:border-blue-500/50",
+    bg: "bg-blue-50/50 dark:bg-blue-500/10",
+    bgHover: "hover:bg-blue-100/50 dark:hover:bg-blue-500/20",
+    icon: "text-blue-400 dark:text-blue-500",
+    iconSelected: "text-blue-600 dark:text-blue-400",
+    handle: "border-blue-400! dark:border-blue-500!",
+    handleSelected: "border-blue-500! dark:border-blue-400!",
+    title: "text-blue-700 dark:text-blue-300",
+    titleSelected: "text-blue-900 dark:text-blue-100",
+  },
+  pink: {
+    border: "border-pink-300 dark:border-pink-500/50",
+    bg: "bg-pink-50/50 dark:bg-pink-500/10",
+    bgHover: "hover:bg-pink-100/50 dark:hover:bg-pink-500/20",
+    icon: "text-pink-400 dark:text-pink-500",
+    iconSelected: "text-pink-600 dark:text-pink-400",
+    handle: "border-pink-400! dark:border-pink-500!",
+    handleSelected: "border-pink-500! dark:border-pink-400!",
+    title: "text-pink-700 dark:text-pink-300",
+    titleSelected: "text-pink-900 dark:text-pink-100",
+  },
+  indigo: {
+    border: "border-indigo-300 dark:border-indigo-500/50",
+    bg: "bg-indigo-50/50 dark:bg-indigo-500/10",
+    bgHover: "hover:bg-indigo-100/50 dark:hover:bg-indigo-500/20",
+    icon: "text-indigo-400 dark:text-indigo-500",
+    iconSelected: "text-indigo-600 dark:text-indigo-400",
+    handle: "border-indigo-400! dark:border-indigo-500!",
+    handleSelected: "border-indigo-500! dark:border-indigo-400!",
+    title: "text-indigo-700 dark:text-indigo-300",
+    titleSelected: "text-indigo-900 dark:text-indigo-100",
+  },
+  // ...add more colors as needed
+};

@@ -37,7 +37,6 @@ export const EditDetailsDialog = memo(
       name: workflow.name || "",
       description: workflow.description || "",
     });
-    console.log("render-q");
 
     // Initialize refs when dialog opens
     useEffect(() => {
