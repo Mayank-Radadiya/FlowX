@@ -1,15 +1,15 @@
 "use client";
 
 import { type NodeProps, type Node, useReactFlow } from "@xyflow/react";
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { HttpRequestDialog } from "./Dialog";
 import BaseExecutionNode from "./BaseExecutionNode";
+import { HttpRequestFormValues } from "./http-request.schema";
 
 type HttpRequestNodeData = {
   endPontUrl: string;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
-  [key: string]: unknown;
 };
 
 type HttpRequestNodeProps = Node<HttpRequestNodeData>;
@@ -27,11 +27,7 @@ const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
     setOpen(true);
   };
 
-  const handleSubmit = (values: {
-    endpointUrl: string;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-    body?: string;
-  }) => {
+  const handleSubmit = (values: HttpRequestFormValues) => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === props.id) {
@@ -39,9 +35,7 @@ const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
             ...node,
             data: {
               ...node.data,
-              endPontUrl: values.endpointUrl,
-              method: values.method,
-              body: values.body,
+              ...values,
             },
           };
         }
@@ -49,16 +43,26 @@ const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeProps>) => {
       })
     );
   };
+
+  const defaultData = useMemo(
+    () => ({
+      endpointUrl: NodeData.endPontUrl,
+      method: NodeData.method,
+      body: NodeData.body,
+    }),
+    [NodeData.endPontUrl, NodeData.method, NodeData.body]
+  );
+
   return (
     <>
-      <HttpRequestDialog
-        open={open}
-        onSubmit={handleSubmit}
-        setOpen={setOpen}
-        defaultEndpointUrl={NodeData.endPontUrl}
-        defaultMethod={NodeData.method}
-        defaultBody={NodeData.body}
-      />
+      {open && (
+        <HttpRequestDialog
+          open={open}
+          onSubmit={handleSubmit}
+          setOpen={setOpen}
+          defaultData={defaultData}
+        />
+      )}
       <BaseExecutionNode
         {...props}
         name="HTTP Request"

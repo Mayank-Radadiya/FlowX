@@ -48,6 +48,7 @@ const BaseExecutionNode = memo(
           status={status}
           hasInput={true}
           hasOutput={true}
+          showToolbar={true}
         >
           {children}
         </BaseVisualNode>

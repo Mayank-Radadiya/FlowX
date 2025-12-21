@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { memo, useCallback, useEffect } from "react";
 import { FileText, Globe, Server, Code } from "lucide-react";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
@@ -23,9 +22,10 @@ import {
 } from "@/components/ui/select";
 import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { httpRequestSchema } from "./http-request.schema";
-
-type HttpRequestFormValues = z.infer<typeof httpRequestSchema>;
+import {
+  HttpRequestFormValues,
+  httpRequestSchema,
+} from "./http-request.schema";
 
 // ---------------------------------------------------------
 // Component
@@ -34,27 +34,17 @@ interface HttpRequestDialogProps {
   open?: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (values: HttpRequestFormValues) => void;
-
-  defaultEndpointUrl?: string;
-  defaultMethod?: HttpRequestFormValues["method"];
-  defaultBody?: string;
+  defaultData?: Partial<HttpRequestFormValues>;
 }
 
 export const HttpRequestDialog = memo(
-  ({
-    open,
-    setOpen,
-    onSubmit,
-    defaultBody = "",
-    defaultEndpointUrl = "",
-    defaultMethod = "GET",
-  }: HttpRequestDialogProps) => {
+  ({ open, setOpen, onSubmit, defaultData = {} }: HttpRequestDialogProps) => {
     const form = useForm<HttpRequestFormValues>({
       resolver: zodResolver(httpRequestSchema),
       defaultValues: {
-        endpointUrl: defaultEndpointUrl,
-        method: defaultMethod,
-        body: defaultBody,
+        endpointUrl: defaultData.endpointUrl || "",
+        method: defaultData.method || "GET",
+        body: defaultData.body || "",
       },
     });
 
@@ -73,13 +63,9 @@ export const HttpRequestDialog = memo(
 
     useEffect(() => {
       if (open) {
-        form.reset({
-          endpointUrl: defaultEndpointUrl,
-          method: defaultMethod,
-          body: defaultBody,
-        });
+        form.reset(defaultData);
       }
-    }, [open, defaultBody, defaultEndpointUrl, defaultMethod, form]);
+    }, [open]);
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -150,6 +136,7 @@ export const HttpRequestDialog = memo(
 
               <Controller
                 control={form.control}
+                defaultValue={defaultData?.method || "GET"}
                 name="method"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>

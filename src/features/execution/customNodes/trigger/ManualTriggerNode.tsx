@@ -12,7 +12,7 @@ const ManualTriggerNode = memo((props: NodeProps) => {
 
   return (
     <>
-      <ManualTriggerDialog open={open} setOpen={setOpen} />
+      {open && <ManualTriggerDialog open={open} setOpen={setOpen} />}
       <BaseTriggerNode
         {...props}
         name="Manual Trigger"
@@ -21,11 +21,10 @@ const ManualTriggerNode = memo((props: NodeProps) => {
         onSettings={handleSetting}
         onDoubleClick={handleSetting}
         imageUrl={"/icons/trigger.svg"}
+        w
       />
     </>
   );
 });
-
-ManualTriggerNode.displayName = "ManualTriggerNode";
 
 export default ManualTriggerNode;

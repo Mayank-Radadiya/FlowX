@@ -19,7 +19,7 @@ const EditorShell = ({ workflowId, workflow }: EditorShellProps) => {
       <EditorHeader workflowId={workflowId} workflowName={workflow.name} />
 
       <div className="flex-1 min-h-0 bg-neutral-50 dark:bg-neutral-950">
-        <EditorCanvas nodes={workflow.nodes} edges={workflow.edges} />
+        <EditorCanvas nodes={workflow.nodes} edges={workflow.edges} workflowId={workflowId} />
       </div>
     </div>
   );

@@ -38,6 +38,7 @@ const BaseTriggerNode = memo(
       <>
         <BaseVisualNode
           name={name}
+          showToolbar={true}
           description={description}
           onSetting={onSettings}
           onDelete={handleDelete}

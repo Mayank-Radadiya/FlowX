@@ -7,3 +7,5 @@ export const httpRequestSchema = z.object({
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
   body: z.string().optional(),
 });
+
+export type HttpRequestFormValues = z.infer<typeof httpRequestSchema>;

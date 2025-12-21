@@ -57,7 +57,7 @@ export const ManualTriggerDialog = memo(
 
             <DialogDescription
               className="
-              text-lg font-mono  text-neutral-600 dark:text-neutral-400 leading-relaxed
+              text-lg   text-neutral-600 dark:text-neutral-400 leading-relaxed
             "
             >
               Configuration is not required for this node.
@@ -78,6 +78,7 @@ export const ManualTriggerDialog = memo(
                   text-white hover:from-primary/90 hover:to-primary/70
                   transition-all shadow-md shadow-primary/30
                 "
+                onClick={() => setOpen(false)}
               >
                 Close
               </Button>

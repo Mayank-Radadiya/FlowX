@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   ReactFlow,
   applyNodeChanges,
@@ -23,15 +23,19 @@ import { cn } from "@/lib/utils";
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../../store/atom";
 import AddNewNodeButton from "./node-creation/AddNewNodeButton";
+import { EditorExecutionButton } from "./EditorHeader/EditorExecutionButton";
+import { NodeType } from "@prisma/client";
 
 interface EditorCanvasProps {
   nodes: Node[];
   edges: Edge[];
+  workflowId: string;
 }
 
 const EditorCanvas = ({
   nodes: initialNodes,
   edges: initialEdges,
+  workflowId,
 }: EditorCanvasProps) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
@@ -53,6 +57,10 @@ const EditorCanvas = ({
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     []
   );
+
+  const hasManualTriggerNode = useMemo(() => {
+    return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
+  }, [nodes]);
 
   return (
     <div className="w-full h-full relative bg-neutral-50 dark:bg-neutral-950">
@@ -97,6 +105,12 @@ const EditorCanvas = ({
         <Panel position="top-right" className="m-4">
           <AddNewNodeButton />
         </Panel>
+
+        {hasManualTriggerNode && (
+          <Panel position="bottom-center" className="p-5">
+            <EditorExecutionButton workflowId={workflowId} />
+          </Panel>
+        )}
       </ReactFlow>
     </div>
   );
