@@ -2,6 +2,7 @@
 
 import { Play, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useExecuteWorkflow } from "@/features/execution/hooks/use-execute";
 
 interface EditorExecutionButtonProps {
   workflowId: string;
@@ -15,12 +16,27 @@ export function EditorExecutionButton({
   isRunning = false,
   isSuccess = false,
   isError = false,
-  onExecute,
+  workflowId,
 }: EditorExecutionButtonProps) {
+  const executeWorkflow = useExecuteWorkflow();
+
+  const handleWorkflow = () => {
+    executeWorkflow.mutate(
+      { id: workflowId },
+      {
+        onSuccess: () => {
+          isSuccess = executeWorkflow.isSuccess;
+        },
+        onError: () => {
+          isError = executeWorkflow.isError;
+        },
+      }
+    );
+  };
   return (
     <button
       type="button"
-      onClick={onExecute}
+      onClick={handleWorkflow}
       disabled={isRunning}
       className={cn(
         // Base

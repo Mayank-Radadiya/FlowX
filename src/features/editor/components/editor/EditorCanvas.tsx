@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../../store/atom";
 import AddNewNodeButton from "./node-creation/AddNewNodeButton";
-import { EditorExecutionButton } from "./EditorHeader/EditorExecutionButton";
+import { EditorExecutionButton } from "../ui/EditorExecutionButton";
 import { NodeType } from "@prisma/client";
 
 interface EditorCanvasProps {

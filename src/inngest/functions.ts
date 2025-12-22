@@ -3,27 +3,49 @@
  * It keeps the server route clean and acts as a central registry for functions.
  */
 
+import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText } from "ai";
+import { prisma } from "@/lib/db";
+import { topologicalSort } from "./utils";
+import { getNodeExecutor } from "@/features/execution/lib/executor-registry";
+import { NodeType } from "@prisma/client";
 
-const google = createGoogleGenerativeAI();
-
-export const execute = inngest.createFunction(
-  { id: "execute-ai" },
-  { event: "execute/ai" },
+export const executeWorkflow = inngest.createFunction(
+  { id: "execute-workflow" },
+  { event: "workflow/execute.workflow" },
   async ({ event, step }) => {
-    const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: google("gemini-2.5-flash"),
-      system: "You are a helpful assistant. ",
-      prompt: "what is the future of AI?",
-      experimental_telemetry: {
-        isEnabled: true,
-        recordInputs: true,
-        recordOutputs: true,
-      },
+    const workflowId = event.data.workflowId;
+    if (!workflowId) {
+      throw new NonRetriableError("Workflow ID is missing");
+    }
+
+    const sortedNodesIds = await step.run("prepare-workflow", async () => {
+      const workflow = await prisma.workflow.findFirstOrThrow({
+        where: {
+          id: workflowId,
+        },
+        include: {
+          nodes: true,
+          connections: true,
+        },
+      });
+
+      return topologicalSort(workflow.nodes, workflow.connections);
     });
 
-    return { steps };
+    // Initialize context from initial data form the trigger
+    let context = event.data.initialData || {};
+
+    for (const node of sortedNodesIds) {
+      const executor = getNodeExecutor(node.type as NodeType);
+      context = await executor({
+        data: node.data as Record<string, unknown>,
+        nodeId: node.id,
+        context,
+        step,
+      });
+    }
+
+    return { workflowId, result: context };
   }
 );

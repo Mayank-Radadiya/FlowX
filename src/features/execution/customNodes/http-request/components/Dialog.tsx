@@ -53,19 +53,20 @@ export const HttpRequestDialog = memo(
 
     const showBodyField = METHODS_WITH_BODY.has(watchMethod);
 
-    const handleSubmit = useCallback(
-      (data: HttpRequestFormValues) => {
-        onSubmit(data);
-        setOpen(false);
-      },
-      [onSubmit, setOpen]
-    );
+    const handleSubmit = (data: HttpRequestFormValues) => {
+      onSubmit(data);
+      setOpen(false);
+    };
 
     useEffect(() => {
       if (open) {
-        form.reset(defaultData);
+        form.reset({
+          endpointUrl: defaultData.endpointUrl || "",
+          method: defaultData.method || "GET",
+          body: defaultData.body || "",
+        });
       }
-    }, [open]);
+    }, [open, defaultData, form]);
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -139,18 +140,25 @@ export const HttpRequestDialog = memo(
                 defaultValue={defaultData?.method || "GET"}
                 name="method"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="h-11 rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="GET">GET</SelectItem>
-                      <SelectItem value="POST">POST</SelectItem>
-                      <SelectItem value="PUT">PUT</SelectItem>
-                      <SelectItem value="DELETE">DELETE</SelectItem>
-                      <SelectItem value="PATCH">PATCH</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="space-y-1">
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="GET">GET</SelectItem>
+                        <SelectItem value="POST">POST</SelectItem>
+                        <SelectItem value="PUT">PUT</SelectItem>
+                        <SelectItem value="DELETE">DELETE</SelectItem>
+                        <SelectItem value="PATCH">PATCH</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.formState.errors.method && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.method.message}
+                      </p>
+                    )}
+                  </div>
                 )}
               />
             </div>
