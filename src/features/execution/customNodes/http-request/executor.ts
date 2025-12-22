@@ -3,6 +3,7 @@ import { NodeExecutor } from "../../types";
 import ky, { type Options as KyOptions } from "ky";
 
 type HttpRequestExecutorParams = {
+  variableName?: string;
   endpointUrl?: string;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
@@ -18,6 +19,13 @@ export const httpRequestExecutor: NodeExecutor<
     throw new NonRetriableError("HTTP Request Node: No Endpoint configured");
   }
 
+  if (!data.variableName) {
+    // Todo publish error state
+    throw new NonRetriableError(
+      "HTTP Request Node: No Variable Name configured"
+    );
+  }
+
   const result = await step.run("httpRequest", async () => {
     const endpointUrl = data.endpointUrl!;
     const method = data.method || "GET";
@@ -26,6 +34,9 @@ export const httpRequestExecutor: NodeExecutor<
 
     if (["PUT", "PATCH", "POST"].includes(method)) {
       option.body = data.body;
+      option.headers = {
+        "Content-Type": "application/json",
+      };
     }
 
     const response = await ky(endpointUrl, option);
@@ -34,13 +45,24 @@ export const httpRequestExecutor: NodeExecutor<
       ? await response.json()
       : await response.text();
 
-    return {
-      ...context,
+    const responsePayload = {
       httpResponse: {
         status: response.status,
         data: responseData,
         statusText: response.statusText,
       },
+    };
+
+    if (data.variableName) {
+      return {
+        ...context,
+        [data.variableName]: responsePayload,
+      };
+    }
+
+    return {
+      ...context,
+      ...responsePayload,
     };
   });
 

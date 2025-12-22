@@ -2,11 +2,12 @@
 
 import { type NodeProps, type Node, useReactFlow } from "@xyflow/react";
 import { useMemo, useState } from "react";
-import { HttpRequestDialog } from "./Dialog";
+import { HttpRequestDialog } from "./dialog/Dialog";
 import BaseExecutionNode from "./BaseExecutionNode";
 import { HttpRequestFormValues } from "./http-request.schema";
 
 type HttpRequestNodeData = {
+  variableName?: string;
   endpointUrl: string;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
@@ -49,8 +50,14 @@ const HttpRequestNode = (props: NodeProps<HttpRequestNodeProps>) => {
       endpointUrl: NodeData.endpointUrl,
       method: NodeData.method,
       body: NodeData.body,
+      variableName: NodeData.variableName,
     }),
-    [NodeData.endpointUrl, NodeData.method, NodeData.body]
+    [
+      NodeData.endpointUrl,
+      NodeData.method,
+      NodeData.body,
+      NodeData.variableName,
+    ]
   );
 
   return (
