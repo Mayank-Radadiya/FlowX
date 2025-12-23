@@ -24,6 +24,8 @@ import {
   Zap,
   CardSim,
   FileCheck,
+  BadgeDollarSign,
+  Strikethrough,
 } from "lucide-react";
 
 /**
@@ -97,6 +99,20 @@ export const NODE_CATEGORIES = [
         label: "Google Form",
         description: "Run flow when form is submitted",
         icon: FileCheck,
+      },
+    ],
+  },
+  {
+    id: "stripe-trigger",
+    label: "Stripe Trigger",
+    description: "connect with stripe",
+    icon: Strikethrough,
+    nodes: [
+      {
+        type: NodeType.STRIPE_TRIGGER,
+        label: "Stripe Trigger",
+        description: "Run flow when stripe event is received",
+        icon: BadgeDollarSign,
       },
     ],
   },
