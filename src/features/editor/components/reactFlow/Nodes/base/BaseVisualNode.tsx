@@ -1,7 +1,7 @@
 import { LucideProps, Plus, Settings, Trash2 } from "lucide-react";
 import { ComponentType, ReactNode, useState } from "react";
 import { colorVariants } from "./node-colors";
-import { NodeStatus } from "@/features/execution/types";
+import { NodeStatus } from "@/features/execution/customNodes/types";
 import { nodeStatusVariants } from "./node-status";
 import { BaseNode } from "@/components/ui/react-flow/base-node";
 import { cn } from "@/lib/utils";

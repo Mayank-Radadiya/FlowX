@@ -1,7 +1,7 @@
 "use client";
 
 import BaseVisualNode from "@/features/editor/components/reactFlow/Nodes/base/BaseVisualNode";
-import { NodeStatus } from "@/features/execution/types";
+import { NodeStatus } from "@/features/execution/customNodes/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
 import { memo, type ReactNode } from "react";
 

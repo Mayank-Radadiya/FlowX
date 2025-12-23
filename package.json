@@ -13,6 +13,7 @@
     "@ai-sdk/google": "^2.0.44",
     "@base-ui-components/react": "^1.0.0-rc.0",
     "@hookform/resolvers": "^5.2.2",
+    "@inngest/realtime": "^0.4.5",
     "@paralleldrive/cuid2": "^3.0.4",
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
