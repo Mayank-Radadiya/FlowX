@@ -12,8 +12,6 @@ async function CredentialsPage() {
         title="Credentials"
         subtitle="Security"
         description="Enterprise-grade security for your API keys, tokens, and secrets."
-        buttonLabel="Add Credential"
-        newButtonHref="/credentials/new"
         icon={<KeyRound className="size-6" />}
         gradient="blue"
       />

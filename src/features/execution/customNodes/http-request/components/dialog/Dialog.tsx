@@ -9,7 +9,7 @@ import {
 import { memo, useEffect } from "react";
 import { Server } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HttpRequestFormValues } from "../http-request.schema";
+import { HttpRequestFormValues } from "./http-request.schema";
 import { useHttpRequestForm } from "./useHttpRequestForm";
 import { HttpRequestForm } from "./HttpRequestForm";
 

@@ -1,13 +1,22 @@
 import { NonRetriableError } from "inngest";
 import { NodeExecutor } from "../../types";
 import ky, { type Options as KyOptions } from "ky";
+import handlebars from "handlebars";
 
 type HttpRequestExecutorParams = {
-  variableName?: string;
-  endpointUrl?: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  variableName: string;
+  endpointUrl: string;
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
 };
+
+handlebars.registerHelper("json", function (context) {
+  try {
+    return new handlebars.SafeString(JSON.stringify(context ?? {}, null, 2));
+  } catch {
+    return "{}";
+  }
+});
 
 export const httpRequestExecutor: NodeExecutor<
   HttpRequestExecutorParams
@@ -26,14 +35,21 @@ export const httpRequestExecutor: NodeExecutor<
     );
   }
 
+  if (!data.method) {
+    // Todo publish error state
+    throw new NonRetriableError("HTTP Request Node: No Method configured");
+  }
+
   const result = await step.run("httpRequest", async () => {
-    const endpointUrl = data.endpointUrl!;
-    const method = data.method || "GET";
+    const endpointUrl = handlebars.compile(data.endpointUrl)(context);
+    const method = data.method;
 
     const option: KyOptions = { method };
 
     if (["PUT", "PATCH", "POST"].includes(method)) {
-      option.body = data.body;
+      const resolved = handlebars.compile(data.body || "{}")(context);
+      JSON.parse(resolved);
+      option.body = resolved;
       option.headers = {
         "Content-Type": "application/json",
       };
@@ -53,16 +69,9 @@ export const httpRequestExecutor: NodeExecutor<
       },
     };
 
-    if (data.variableName) {
-      return {
-        ...context,
-        [data.variableName]: responsePayload,
-      };
-    }
-
     return {
       ...context,
-      ...responsePayload,
+      [data.variableName]: responsePayload,
     };
   });
 

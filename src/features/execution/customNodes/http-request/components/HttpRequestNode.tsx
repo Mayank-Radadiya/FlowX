@@ -4,7 +4,7 @@ import { type NodeProps, type Node, useReactFlow } from "@xyflow/react";
 import { useMemo, useState } from "react";
 import { HttpRequestDialog } from "./dialog/Dialog";
 import BaseExecutionNode from "./BaseExecutionNode";
-import { HttpRequestFormValues } from "./http-request.schema";
+import { HttpRequestFormValues } from "./dialog/http-request.schema";
 
 type HttpRequestNodeData = {
   variableName?: string;

@@ -21,7 +21,6 @@ const ManualTriggerNode = memo((props: NodeProps) => {
         onSettings={handleSetting}
         onDoubleClick={handleSetting}
         imageUrl={"/icons/trigger.svg"}
-        w
       />
     </>
   );

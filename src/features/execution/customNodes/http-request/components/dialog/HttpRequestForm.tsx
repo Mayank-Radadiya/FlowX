@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import { HttpRequestFormValues } from "../http-request.schema";
+import { HttpRequestFormValues } from "./http-request.schema";
 import { Baseline, FileText, Globe, Code } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DialogClose, DialogDescription } from "@/components/ui/dialog";

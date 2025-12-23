@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import {
   HttpRequestFormValues,
   httpRequestSchema,
-} from "../http-request.schema";
+} from "./http-request.schema";
 import { METHODS_WITH_BODY } from "./http-request.constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 
