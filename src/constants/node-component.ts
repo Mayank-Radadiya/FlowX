@@ -14,6 +14,7 @@
  */
 
 import initialNode from "@/features/editor/components/reactFlow/Nodes/initialNode";
+import GoogleFormTriggerNode from "@/features/execution/customNodes/google-form/GoogleFormTrigger";
 import HttpRequestNode from "@/features/execution/customNodes/http-request/components/HttpRequestNode";
 import ManualTriggerNode from "@/features/execution/customNodes/trigger/ManualTriggerNode";
 import { NodeType } from "@prisma/client";
@@ -34,6 +35,7 @@ export const NODE_COMPONENTS = {
   [NodeType.INITIAL]: initialNode,
   [NodeType.MANUAL_TRIGGER]: ManualTriggerNode,
   [NodeType.HTTP_REQUEST]: HttpRequestNode,
+  [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormTriggerNode,
 } as const satisfies NodeTypes;
 
 /**

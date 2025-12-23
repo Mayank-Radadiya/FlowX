@@ -8,7 +8,7 @@ export const httpRequestSchema = z.object({
       message:
         "Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores",
     }),
-  endpointUrl: z.url(
+  endpointUrl: z.string(
     "Please enter a valid URL (example: https://api.example.com/users)"
   ),
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),

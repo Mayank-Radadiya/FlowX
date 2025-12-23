@@ -2,13 +2,10 @@
 
 import BaseVisualNode from "@/features/editor/components/reactFlow/Nodes/base/BaseVisualNode";
 import { NodeStatus } from "@/features/execution/customNodes/types";
-import { useNodeStatus } from "@/features/execution/hooks/use-node-status";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
 import { memo, type ReactNode } from "react";
-import { fetchHttpRequestRealTimeToken } from "../actions/action";
-import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channel/httpRequestChannel";
 
-interface BaseEductionNodeProps extends NodeProps {
+interface BaseGoogleFormTriggerNodeProps extends NodeProps {
   name?: string;
   description?: string;
   status?: NodeStatus;
@@ -18,9 +15,8 @@ interface BaseEductionNodeProps extends NodeProps {
   imageUrl?: string;
 }
 
-const BaseExecutionNode = memo(
+const BaseGoogleFormTriggerNode = memo(
   ({
-    id,
     name,
     imageUrl,
     description,
@@ -28,8 +24,9 @@ const BaseExecutionNode = memo(
     onSettings,
     onDoubleClick,
     selected,
-    status = "default",
-  }: BaseEductionNodeProps) => {
+    id,
+    status,
+  }: BaseGoogleFormTriggerNodeProps) => {
     const { setNodes, setEdges } = useReactFlow();
 
     const handleDelete = () => {
@@ -37,28 +34,22 @@ const BaseExecutionNode = memo(
       setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
     };
 
-    const nodeStatus = useNodeStatus({
-      nodeId: id,
-      channel: HTTP_REQUEST_CHANNEL_NAME,
-      topic: "status",
-      refreshToken: () => fetchHttpRequestRealTimeToken(),
-    });
-
     return (
       <>
         <BaseVisualNode
           name={name}
+          showToolbar={true}
           description={description}
           onSetting={onSettings}
           onDelete={handleDelete}
           imageUrl={imageUrl}
           selected={selected}
           onDoubleClick={onDoubleClick}
-          color="pink"
-          status={nodeStatus || status}
-          hasInput={true}
+          hasInput={false}
           hasOutput={true}
-          showToolbar={true}
+          className="rounded-l-2xl"
+          color="blue"
+          status={status}
         >
           {children}
         </BaseVisualNode>
@@ -67,4 +58,4 @@ const BaseExecutionNode = memo(
   }
 );
 
-export default BaseExecutionNode;
+export default BaseGoogleFormTriggerNode;

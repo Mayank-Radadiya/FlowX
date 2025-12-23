@@ -1,4 +1,4 @@
-import { inngest } from "@/inngest/client";
+import { sendWorkflowExecution } from "@/inngest/helper";
 import { prisma } from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import z from "zod";
@@ -14,12 +14,10 @@ export const executeWorkflowRoute = createTRPCRouter({
         },
       });
 
-      await inngest.send({
-        name: "workflow/execute.workflow",
-        data: {
-          workflowId: workflow.id,
-        },
+      await sendWorkflowExecution({
+        workflowId: workflow.id,
       });
+
       return workflow;
     }),
 });

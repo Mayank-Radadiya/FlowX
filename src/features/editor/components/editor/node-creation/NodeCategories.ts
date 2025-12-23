@@ -17,7 +17,14 @@
  */
 
 import { NodeType } from "@prisma/client";
-import { GlobeIcon, MousePointer, Workflow, Zap } from "lucide-react";
+import {
+  GlobeIcon,
+  MousePointer,
+  Workflow,
+  Zap,
+  CardSim,
+  FileCheck,
+} from "lucide-react";
 
 /**
  * NODE_CATEGORIES structure
@@ -76,6 +83,20 @@ export const NODE_CATEGORIES = [
         label: "HTTP Request",
         description: "Make API calls",
         icon: GlobeIcon,
+      },
+    ],
+  },
+  {
+    id: "google-form",
+    label: "Form ",
+    description: "connect with google form",
+    icon: CardSim,
+    nodes: [
+      {
+        type: NodeType.GOOGLE_FORM_TRIGGER,
+        label: "Google Form",
+        description: "Run flow when form is submitted",
+        icon: FileCheck,
       },
     ],
   },
