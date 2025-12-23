@@ -4,7 +4,7 @@ import { httpRequestExecutor } from "../customNodes/http-request/executor";
 import { manualTriggerExecutor } from "../customNodes/trigger/executor";
 import { googleFormTriggerExecutor } from "../customNodes/google-form/executor";
 
-export const executorRegistry: Record<NodeType, NodeExecutor<any>> = {
+export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.INITIAL]: manualTriggerExecutor,
   [NodeType.HTTP_REQUEST]: httpRequestExecutor,
   [NodeType.MANUAL_TRIGGER]: manualTriggerExecutor,

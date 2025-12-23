@@ -5,9 +5,9 @@ import handlebars from "handlebars";
 import { httpRequestChannel } from "@/inngest/channel/httpRequestChannel";
 
 type HttpRequestExecutorParams = {
-  variableName: string;
-  endpointUrl: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  variableName?: string;
+  endpointUrl?: string;
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
 };
 
@@ -25,30 +25,28 @@ export const httpRequestExecutor: NodeExecutor<
   // Publish loading state
   await publish(httpRequestChannel().status({ nodeId, status: "loading" }));
 
-  if (!data.endpointUrl) {
-    // Todo publish error state
-    await publish(httpRequestChannel().status({ nodeId, status: "error" }));
-    throw new NonRetriableError("HTTP Request Node: No Endpoint configured");
-  }
-
-  if (!data.variableName) {
-    // Todo publish error state
-    await publish(httpRequestChannel().status({ nodeId, status: "error" }));
-    throw new NonRetriableError(
-      "HTTP Request Node: No Variable Name configured"
-    );
-  }
-
-  if (!data.method) {
-    // Todo publish error state
-    await publish(httpRequestChannel().status({ nodeId, status: "error" }));
-    throw new NonRetriableError("HTTP Request Node: No Method configured");
-  }
-
   try {
     const result = await step.run("httpRequest", async () => {
+      if (!data.endpointUrl) {
+        await publish(httpRequestChannel().status({ nodeId, status: "error" }));
+        throw new NonRetriableError(
+          "HTTP Request Node: No Endpoint configured"
+        );
+      }
+
+      if (!data.variableName) {
+        await publish(httpRequestChannel().status({ nodeId, status: "error" }));
+        throw new NonRetriableError(
+          "HTTP Request Node: No Variable Name configured"
+        );
+      }
+
+      if (!data.method) {
+        await publish(httpRequestChannel().status({ nodeId, status: "error" }));
+        throw new NonRetriableError("HTTP Request Node: No Method configured");
+      }
       const endpointUrl = handlebars.compile(data.endpointUrl)(context);
-      const method = data.method;
+      const method = data.method || "GET";
 
       const option: KyOptions = { method };
 
