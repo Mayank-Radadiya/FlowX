@@ -80,21 +80,23 @@ export function NodeCatalog() {
       </div>
 
       {/* Scrollable node list */}
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thin-thumb">
         {filteredCategories.length ? (
-          filteredCategories.map((category) => (
-            <CategorySection
-              key={category.id}
-              category={category}
-              /**
-               * Node selection handler
-               * ----------------------
-               * Converts a selected node option into
-               * an actual workflow node in the editor.
-               */
-              onSelectNode={(node) => createNode(node.type)}
-            />
-          ))
+          <div className="flex flex-col gap-3 pb-5">
+            {filteredCategories.map((category) => (
+              <CategorySection
+                key={category.id}
+                category={category}
+                /**
+                 * Node selection handler
+                 * ----------------------
+                 * Converts a selected node option into
+                 * an actual workflow node in the editor.
+                 */
+                onSelectNode={(node) => createNode(node.type)}
+              />
+            ))}
+          </div>
         ) : (
           /**
            * Empty search state

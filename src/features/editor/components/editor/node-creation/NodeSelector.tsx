@@ -80,9 +80,9 @@ export const NodeSelector = ({ children }: NodeSelectorProps) => {
           Main scrollable content area.
           This is where the node catalog UI lives.
         */}
-        <SheetPanel className="flex flex-col gap-4">
+        <div className="flex flex-1 min-h-0 flex-col gap-4 px-6 pb-6 pt-4">
           <NodeCatalog />
-        </SheetPanel>
+        </div>
       </SheetContent>
     </Sheet>
   );

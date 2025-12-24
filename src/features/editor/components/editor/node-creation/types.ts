@@ -4,7 +4,8 @@ export type NodeTypeOption = {
   type: NodeType;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon?: React.ComponentType<{ className?: string }>;
+  image?: string;
 };
 
 export type NodeCategory = {

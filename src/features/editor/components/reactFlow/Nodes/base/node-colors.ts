@@ -44,5 +44,27 @@ export const colorVariants = {
     title: "text-indigo-700 dark:text-indigo-300",
     titleSelected: "text-indigo-900 dark:text-indigo-100",
   },
+  green: {
+    border: "border-emerald-300 dark:border-emerald-500/50",
+    bg: "bg-emerald-50/50 dark:bg-emerald-500/10",
+    bgHover: "hover:bg-emerald-100/50 dark:hover:bg-emerald-500/20",
+    icon: "text-emerald-400 dark:text-emerald-500",
+    iconSelected: "text-emerald-600 dark:text-emerald-400",
+    handle: "border-emerald-400! dark:border-emerald-500!",
+    handleSelected: "border-emerald-500! dark:border-emerald-400!",
+    title: "text-emerald-700 dark:text-emerald-300",
+    titleSelected: "text-emerald-900 dark:text-emerald-100",
+  },
+  orange: {
+    border: "border-orange-300 dark:border-orange-500/50",
+    bg: "bg-orange-50/50 dark:bg-orange-500/10",
+    bgHover: "hover:bg-orange-100/50 dark:hover:bg-orange-500/20",
+    icon: "text-orange-400 dark:text-orange-500",
+    iconSelected: "text-orange-600 dark:text-orange-400",
+    handle: "border-orange-400! dark:border-orange-500!",
+    handleSelected: "border-orange-500! dark:border-orange-400!",
+    title: "text-orange-700 dark:text-orange-300",
+    titleSelected: "text-orange-900 dark:text-orange-100",
+  },
   // ...add more colors as needed
 };

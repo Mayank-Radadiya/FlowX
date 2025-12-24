@@ -14,8 +14,11 @@
  */
 
 import initialNode from "@/features/editor/components/reactFlow/Nodes/initialNode";
+import AnthropicNode from "@/features/execution/customNodes/anthropic/components/AnthropicNode";
+import GeminiNode from "@/features/execution/customNodes/gemini/components/GeminiNode";
 import GoogleFormTriggerNode from "@/features/execution/customNodes/google-form/GoogleFormTrigger";
 import HttpRequestNode from "@/features/execution/customNodes/http-request/components/HttpRequestNode";
+import OpenAINode from "@/features/execution/customNodes/openai/components/OpenAINode";
 import StripeTriggerNode from "@/features/execution/customNodes/stripe-trigger/StripeTrigger";
 import ManualTriggerNode from "@/features/execution/customNodes/trigger/ManualTriggerNode";
 import { NodeType } from "@prisma/client";
@@ -38,6 +41,9 @@ export const NODE_COMPONENTS = {
   [NodeType.HTTP_REQUEST]: HttpRequestNode,
   [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormTriggerNode,
   [NodeType.STRIPE_TRIGGER]: StripeTriggerNode,
+  [NodeType.GEMINI]: GeminiNode,
+  [NodeType.OPENAI]: OpenAINode,
+  [NodeType.ANTHROPIC]: AnthropicNode,
 } as const satisfies NodeTypes;
 
 /**

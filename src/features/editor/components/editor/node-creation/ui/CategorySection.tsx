@@ -41,7 +41,7 @@ const CategorySection = ({ category, onSelectNode }: CategorySectionProps) => {
      * Provides vertical spacing between multiple categories
      * inside the node selection panel.
      */
-    <div className="space-y-3 mt-3">
+    <div className="space-y-1 mt-3">
       {/* 
         Category header
         ----------------
@@ -50,7 +50,7 @@ const CategorySection = ({ category, onSelectNode }: CategorySectionProps) => {
       */}
       <div className="flex items-center gap-2 px-1">
         <div className="flex size-6 items-center justify-center rounded-md bg-muted text-muted-foreground">
-          <CategoryIcon className="size-3.5" />
+          <CategoryIcon className="size-4" />
         </div>
         <div className="flex flex-col">
           <span className="text-sm font-medium text-foreground">
@@ -68,7 +68,7 @@ const CategorySection = ({ category, onSelectNode }: CategorySectionProps) => {
         Renders all node options belonging to this category.
         Each item delegates selection handling upward.
       */}
-      <div className="grid gap-2">
+      <div className="grid gap-2 pr-5 ">
         {category.nodes.map((node) => (
           <NodeListItem key={node.type} node={node} onSelect={onSelectNode} />
         ))}

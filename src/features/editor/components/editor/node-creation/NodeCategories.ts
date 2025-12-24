@@ -26,6 +26,10 @@ import {
   FileCheck,
   BadgeDollarSign,
   Strikethrough,
+  BrainCircuit,
+  Bot,
+  BotMessageSquare,
+  Activity,
 } from "lucide-react";
 
 /**
@@ -72,7 +76,7 @@ export const NODE_CATEGORIES = [
     id: "actions",
     label: "Actions",
     description: "Perform operations",
-    icon: Workflow,
+    icon: Activity,
     nodes: [
       {
         /**
@@ -113,6 +117,50 @@ export const NODE_CATEGORIES = [
         label: "Stripe Trigger",
         description: "Run flow when stripe event is received",
         icon: BadgeDollarSign,
+      },
+    ],
+  },
+  {
+    id: "gemini",
+    label: "Google Gemini",
+    description: "Run prompts using Google Gemini models",
+    icon: BrainCircuit,
+    nodes: [
+      {
+        type: NodeType.GEMINI,
+        label: "Gemini",
+        description: "Generate text and reasoning using Google’s Gemini models",
+        image: "/image/gemini.svg",
+      },
+    ],
+  },
+  {
+    id: "open-ai",
+    label: "OpenAI",
+    description: "Run prompts using OpenAI GPT models",
+    icon: Bot,
+    nodes: [
+      {
+        type: NodeType.OPENAI,
+        label: "OpenAI",
+        description:
+          "Generate text, code, and structured output using OpenAI models",
+        image: "/image/openai.svg",
+      },
+    ],
+  },
+  {
+    id: "anthropic",
+    label: "Anthropic",
+    description: "Run prompts using Anthropic Claude models",
+    icon: BotMessageSquare,
+    nodes: [
+      {
+        type: NodeType.ANTHROPIC,
+        label: "Anthropic",
+        description:
+          "Generate safe and reliable AI responses using Claude models",
+        image: "/image/anthropic.svg",
       },
     ],
   },
