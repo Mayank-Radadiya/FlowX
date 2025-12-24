@@ -6,9 +6,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   devIndicators: false,
   // Disable type checking during build to speed up builds
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // typescript: {
+  //   ignoreBuildErrors: true,
+  // },
 
   async redirects() {
     return [
