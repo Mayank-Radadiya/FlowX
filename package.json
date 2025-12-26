@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"bun run dev\" \"npx inngest-cli@latest dev\"",
+    "dev": "NODE_OPTIONS='--no-deprecation' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

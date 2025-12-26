@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/global/PageHeader/PageHeader";
 import { requiredAuth } from "@/features/auth/server/guards";
 import { Activity } from "lucide-react";
-import { HeroSection } from "./_components/HeroSection";
+import { CredentialListBoundary } from "@/features/credentials/components/page/CredentialListBoundary";
 
 async function ExecutionsPage() {
   await requiredAuth();
@@ -15,7 +15,7 @@ async function ExecutionsPage() {
         icon={<Activity className="size-6" />}
         gradient="orange"
       />
-      <HeroSection />
+      <CredentialListBoundary />
     </div>
   );
 }

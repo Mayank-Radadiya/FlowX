@@ -1,22 +1,29 @@
-import { PageHeader } from "@/components/global/PageHeader/PageHeader";
 import { requiredAuth } from "@/features/auth/server/guards";
-import { KeyRound } from "lucide-react";
-import { HeroSection } from "./_components/HeroSection";
+import { SearchParams } from "nuqs";
+import { credentialsParamsLoader } from "@/features/credentials/server/params-loader";
+import { prefetchCredentials } from "@/features/credentials/server/prefetch";
+import { HydrateClient } from "@/trpc/server";
+import { CredentialsPageShell } from "@/features/credentials/components/page/CredentialsPageShell";
+import { CredentialListBoundary } from "@/features/credentials/components/page/CredentialListBoundary";
 
-async function CredentialsPage() {
+interface Props {
+  searchParams: Promise<SearchParams>;
+}
+
+async function CredentialsPage({ searchParams }: Props) {
   await requiredAuth();
 
-  return (
-    <div className="flex flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
-      <PageHeader
-        title="Credentials"
-        subtitle="Security"
-        description="Enterprise-grade security for your API keys, tokens, and secrets."
-        icon={<KeyRound className="size-6" />}
-        gradient="blue"
-      />
+  const params = await credentialsParamsLoader(searchParams);
 
-      <HeroSection />
+  prefetchCredentials(params);
+
+  return (
+    <div className="flex flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-4">
+      <HydrateClient>
+        <CredentialsPageShell>
+          <CredentialListBoundary />
+        </CredentialsPageShell>
+      </HydrateClient>
     </div>
   );
 }
