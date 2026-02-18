@@ -9,7 +9,6 @@ export { useAnthropicForm } from "./useAnthropicForm";
 export { anthropicSchema, type AnthropicFormValues } from "./anthropic.schema";
 export {
   AVAILABLE_MODELS,
-  ANTHROPIC_API_KEY,
   DEFAULT_MODEL,
   type AnthropicModel,
 } from "./anthropic.constants";
