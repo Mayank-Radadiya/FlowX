@@ -19,7 +19,7 @@ type OpenAINodeData = {
   model?: OpenAIModel;
   systemPrompt?: string;
   userPrompt?: string;
-  openaiApiKey?: string;
+  credentialId?: string;
 };
 
 type OpenAINodeProps = Node<OpenAINodeData>;
@@ -51,8 +51,8 @@ const OpenAINode = (props: NodeProps<OpenAINodeProps>) => {
       nds.map((node) =>
         node.id === props.id
           ? { ...node, data: { ...node.data, ...values } }
-          : node
-      )
+          : node,
+      ),
     );
   };
 
@@ -62,15 +62,15 @@ const OpenAINode = (props: NodeProps<OpenAINodeProps>) => {
       model: nodeData.model,
       systemPrompt: nodeData.systemPrompt,
       userPrompt: nodeData.userPrompt,
-      openaiApiKey: nodeData.openaiApiKey,
+      credentialId: nodeData.credentialId,
     }),
     [
       nodeData.variableName,
       nodeData.model,
       nodeData.systemPrompt,
       nodeData.userPrompt,
-      nodeData.openaiApiKey,
-    ]
+      nodeData.credentialId,
+    ],
   );
 
   return (

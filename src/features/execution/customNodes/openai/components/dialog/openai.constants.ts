@@ -36,8 +36,5 @@ export const AVAILABLE_MODELS = [
 /** Model value type derived from AVAILABLE_MODELS */
 export type OpenAIModel = (typeof AVAILABLE_MODELS)[number]["value"];
 
-/** Default OpenAI API key from environment */
-export const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
-
 /** Default model selection */
 export const DEFAULT_MODEL: OpenAIModel = "gpt-4.1";

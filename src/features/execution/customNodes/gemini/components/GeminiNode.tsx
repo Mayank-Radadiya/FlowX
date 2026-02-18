@@ -19,7 +19,7 @@ type GeminiNodeData = {
   model?: GeminiModel;
   systemPrompt?: string;
   userPrompt?: string;
-  geminiApiKey?: string;
+  credentialId?: string;
 };
 
 type GeminiNodeProps = Node<GeminiNodeData>;
@@ -51,8 +51,8 @@ const GeminiNode = (props: NodeProps<GeminiNodeProps>) => {
       nds.map((node) =>
         node.id === props.id
           ? { ...node, data: { ...node.data, ...values } }
-          : node
-      )
+          : node,
+      ),
     );
   };
 
@@ -62,15 +62,15 @@ const GeminiNode = (props: NodeProps<GeminiNodeProps>) => {
       model: nodeData.model,
       systemPrompt: nodeData.systemPrompt,
       userPrompt: nodeData.userPrompt,
-      geminiApiKey: nodeData.geminiApiKey,
+      credentialId: nodeData.credentialId,
     }),
     [
       nodeData.variableName,
       nodeData.model,
       nodeData.systemPrompt,
       nodeData.userPrompt,
-      nodeData.geminiApiKey,
-    ]
+      nodeData.credentialId,
+    ],
   );
 
   return (

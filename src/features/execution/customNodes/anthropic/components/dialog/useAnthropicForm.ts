@@ -7,7 +7,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnthropicFormValues, anthropicSchema } from "./anthropic.schema";
-import { DEFAULT_MODEL, ANTHROPIC_API_KEY } from "./anthropic.constants";
+import { DEFAULT_MODEL } from "./anthropic.constants";
 
 interface UseAnthropicFormProps {
   /** Existing form values for editing */
@@ -30,7 +30,7 @@ export function useAnthropicForm({
       model: defaultData.model || DEFAULT_MODEL,
       systemPrompt: defaultData.systemPrompt || "",
       userPrompt: defaultData.userPrompt || "",
-      anthropicApiKey: defaultData.anthropicApiKey || ANTHROPIC_API_KEY,
+      credentialId: defaultData.credentialId || "",
     },
   });
 

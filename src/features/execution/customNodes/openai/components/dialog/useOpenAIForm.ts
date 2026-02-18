@@ -7,7 +7,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OpenAIFormValues, openaiSchema } from "./openai.schema";
-import { DEFAULT_MODEL, OPENAI_API_KEY } from "./openai.constants";
+import { DEFAULT_MODEL } from "./openai.constants";
 
 interface UseOpenAIFormProps {
   /** Existing form values for editing */
@@ -30,7 +30,7 @@ export function useOpenAIForm({
       model: defaultData.model || DEFAULT_MODEL,
       systemPrompt: defaultData.systemPrompt || "",
       userPrompt: defaultData.userPrompt || "",
-      openaiApiKey: defaultData.openaiApiKey || OPENAI_API_KEY,
+      credentialId: defaultData.credentialId || "",
     },
   });
 

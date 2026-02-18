@@ -4,13 +4,14 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import handlebars from "handlebars";
 import { openaiChannel } from "@/inngest/channel/openai";
+import { prisma } from "@/lib/db";
 
 type OpenAIExecutorParams = {
   variableName?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
-  openaiApiKey?: string;
+  credentialId?: string;
 };
 
 handlebars.registerHelper("json", function (context) {
@@ -36,7 +37,7 @@ export const openaiExecutor: NodeExecutor<OpenAIExecutorParams> = async ({
       openaiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("Variable name is required");
   }
@@ -46,7 +47,7 @@ export const openaiExecutor: NodeExecutor<OpenAIExecutorParams> = async ({
       openaiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("User prompt is required");
   }
@@ -58,14 +59,26 @@ export const openaiExecutor: NodeExecutor<OpenAIExecutorParams> = async ({
     ? handlebars.compile(data.userPrompt)(context)
     : "What can I help you with?";
 
-  const apiKey = data.openaiApiKey || process.env.OPENAI_API_KEY;
+  // Resolve API key: credential from vault > environment variable
+  let apiKey = process.env.OPENAI_API_KEY;
+
+  if (data.credentialId) {
+    const credential = await prisma.credential.findUnique({
+      where: { id: data.credentialId },
+      select: { value: true },
+    });
+
+    if (credential?.value) {
+      apiKey = credential.value;
+    }
+  }
 
   if (!apiKey) {
     await publish(
       openaiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("OpenAI API key is required");
   }
@@ -92,7 +105,7 @@ export const openaiExecutor: NodeExecutor<OpenAIExecutorParams> = async ({
       openaiChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return {
@@ -106,7 +119,7 @@ export const openaiExecutor: NodeExecutor<OpenAIExecutorParams> = async ({
       openaiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

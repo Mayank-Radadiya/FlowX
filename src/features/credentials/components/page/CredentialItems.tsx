@@ -2,6 +2,7 @@
  * CredentialItems Component
  * -------------------------
  * Premium bento-style layout with stats widgets and credential cards.
+ * Includes pagination inside Suspense boundary to prevent hydration mismatch.
  */
 
 "use client";
@@ -11,6 +12,7 @@ import { EmptyCredentialState } from "./ui/EmptyCredentialState";
 import { CredentialCard } from "./CredentialCard";
 import { Lock, Sparkles, Bot, Brain } from "lucide-react";
 import { StatCard } from "./ui/StatCard";
+import PaginationUi from "@/components/global/pagination/PaginationUi";
 
 export function CredentialItems() {
   const { data } = useSuspenseCredentials();
@@ -19,7 +21,7 @@ export function CredentialItems() {
     return <EmptyCredentialState />;
   }
 
-  // Count by type
+  // Count by type (current page only - for overall counts, backend would need to aggregate)
   const counts = {
     OPENAI: data.items.filter((c) => c.type === "OPENAI").length,
     ANTHROPIC: data.items.filter((c) => c.type === "ANTHROPIC").length,
@@ -40,7 +42,7 @@ export function CredentialItems() {
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-4xl font-bold text-white">
-                {data.items.length}
+                {data.totalCount}
               </span>
               <span className="text-white/40 text-sm">credentials</span>
             </div>
@@ -87,6 +89,13 @@ export function CredentialItems() {
           />
         ))}
       </div>
+
+      {/* Pagination - Inside Suspense boundary to avoid hydration mismatch */}
+      {data.totalPages > 1 && (
+        <div className="flex items-center justify-end pt-4 border-t border-white/10">
+          <PaginationUi currentPage={data.page} totalPages={data.totalPages} />
+        </div>
+      )}
     </div>
   );
 }

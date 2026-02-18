@@ -10,7 +10,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { KeySquare } from "lucide-react";
 
 interface Props {
   className?: string;
@@ -22,7 +22,7 @@ export function CreateCredentialTrigger({ className, children }: Props) {
     <div
       className={cn(
         // Base layout and alignment
-        "inline-flex items-center justify-center gap-2 rounded-xl",
+        "inline-flex items-center justify-center gap-2 rounded-xl group",
 
         // Blue gradient for credentials theme
         "bg-linear-to-r from-blue-500 to-cyan-600",
@@ -39,7 +39,7 @@ export function CreateCredentialTrigger({ className, children }: Props) {
     >
       {children ?? (
         <>
-          <Plus className="size-4" />
+          <KeySquare className="size-4 group-hover:animate-pulse group-hover:fill-blue-500 group-hover:scale-105" />
           Add Credential
         </>
       )}

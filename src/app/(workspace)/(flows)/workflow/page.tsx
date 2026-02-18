@@ -3,7 +3,7 @@ import { requiredAuth } from "@/features/auth/server/guards";
 import { HydrateClient } from "@/trpc/server";
 import type { SearchParams } from "nuqs/server";
 import { workflowsParamsLoader } from "@/features/workflows/server/params-loader";
-import { WorkflowListBoundary } from "@/features/workflows/components/WorkflowListBoundary";
+import WorkflowListBoundary from "@/features/workflows/components/WorkflowListBoundary";
 import { WorkflowsPageShell } from "@/features/workflows/components/page/WorkflowsPageShell";
 
 interface props {

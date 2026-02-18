@@ -8,13 +8,13 @@
 
 import {
   KeyRound,
-  Plus,
   Shield,
   Lock,
   Fingerprint,
   Sparkles,
   Bot,
   Brain,
+  Key,
 } from "lucide-react";
 import { CreateCredentialDialog } from "../../create-credential/CreateCredentialDialog";
 import { cn } from "@/lib/utils";
@@ -27,7 +27,7 @@ const providers = [
 
 export function EmptyCredentialState() {
   return (
-    <div className="flex flex-col items-center justify-center py-8">
+    <div className="flex flex-col items-center justify-center py-8 w-full">
       {/* Compact Card */}
       <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-white/[0.02] p-8 backdrop-blur-xl">
         {/* Background glow */}
@@ -42,18 +42,15 @@ export function EmptyCredentialState() {
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-white">Your vault is empty</h2>
-          <p className="mt-2 text-sm text-white/50 max-w-xs">
-            Add API credentials for your AI providers. All secrets are
-            encrypted.
-          </p>
+          <h2 className="text-xl font-bold text-white">No Credentials Found</h2>
+          <p className="mt-2 text-sm text-white/50 max-w-xs"></p>
 
           {/* CTA */}
           <div className="mt-6">
             <CreateCredentialDialog>
               <span className="flex items-center gap-2">
-                <Plus className="size-4" />
-                Add First Credential
+                <Key className="size-4" />
+                Add New Credential
               </span>
             </CreateCredentialDialog>
           </div>

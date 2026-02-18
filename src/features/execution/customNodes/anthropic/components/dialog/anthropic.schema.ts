@@ -10,7 +10,7 @@ import { AVAILABLE_MODELS } from "./anthropic.constants";
 /** Extract model values for enum validation */
 const modelValues = AVAILABLE_MODELS.map((m) => m.value) as [
   string,
-  ...string[]
+  ...string[],
 ];
 
 export const anthropicSchema = z.object({
@@ -32,8 +32,8 @@ export const anthropicSchema = z.object({
   /** Required user prompt/question for the AI */
   userPrompt: z.string().min(1, "User prompt is required"),
 
-  /** API key - stored as string, can be empty to use default */
-  anthropicApiKey: z.string(),
+  /** Optional credential ID from the Credentials vault */
+  credentialId: z.string().optional(),
 });
 
 export type AnthropicFormValues = z.infer<typeof anthropicSchema>;

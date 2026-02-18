@@ -20,7 +20,7 @@ import WorkflowSkeleton from "./WorkflowSkeleton";
 import WorkflowError from "./WorkflowError";
 import { WorkflowItems } from "./WorkflowItems";
 
-export function WorkflowListBoundary() {
+function WorkflowListBoundary() {
   return (
     /**
      * ErrorBoundary
@@ -47,3 +47,5 @@ export function WorkflowListBoundary() {
     </ErrorBoundary>
   );
 }
+
+export default WorkflowListBoundary;

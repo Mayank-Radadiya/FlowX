@@ -10,7 +10,7 @@ import { AVAILABLE_MODELS } from "./openai.constants";
 /** Extract model values for enum validation */
 const modelValues = AVAILABLE_MODELS.map((m) => m.value) as [
   string,
-  ...string[]
+  ...string[],
 ];
 
 export const openaiSchema = z.object({
@@ -32,8 +32,8 @@ export const openaiSchema = z.object({
   /** Required user prompt/question for the AI */
   userPrompt: z.string().min(1, "User prompt is required"),
 
-  /** API key - stored as string, can be empty to use default */
-  openaiApiKey: z.string(),
+  /** Optional credential ID from the Credentials vault */
+  credentialId: z.string().optional(),
 });
 
 export type OpenAIFormValues = z.infer<typeof openaiSchema>;

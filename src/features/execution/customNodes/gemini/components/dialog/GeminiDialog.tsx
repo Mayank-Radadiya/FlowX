@@ -9,15 +9,7 @@
 
 import { memo, useEffect } from "react";
 import { Controller } from "react-hook-form";
-import {
-  Sparkles,
-  MessageSquare,
-  Settings2,
-  Wand2,
-  Key,
-  ChevronDown,
-  Bot,
-} from "lucide-react";
+import { Sparkles, MessageSquare, Settings2, Wand2, Bot } from "lucide-react";
 
 import {
   Dialog,
@@ -45,11 +37,8 @@ import {
 import { cn } from "@/lib/utils";
 import { GeminiFormValues } from "./gemini.schema";
 import { useGeminiForm } from "./useGeminiForm";
-import {
-  AVAILABLE_MODELS,
-  DEFAULT_MODEL,
-  GEMINI_API_KEY,
-} from "./gemini.constants";
+import { AVAILABLE_MODELS, DEFAULT_MODEL } from "./gemini.constants";
+import { CredentialSelector } from "@/features/execution/customNodes/shared/CredentialSelector";
 
 interface GeminiDialogProps {
   open?: boolean;
@@ -81,7 +70,7 @@ export const GeminiDialog = memo(function GeminiDialog({
       model: defaultData.model || DEFAULT_MODEL,
       systemPrompt: defaultData.systemPrompt || "",
       userPrompt: defaultData.userPrompt || "",
-      geminiApiKey: defaultData.geminiApiKey || GEMINI_API_KEY,
+      credentialId: defaultData.credentialId || "",
     });
   }, [open, defaultData, form]);
 
@@ -122,7 +111,7 @@ export const GeminiDialog = memo(function GeminiDialog({
                   "placeholder:text-neutral-400 dark:placeholder:text-white/30",
                   "focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20",
                   "transition-all duration-200",
-                  form.formState.errors.variableName && "border-red-500"
+                  form.formState.errors.variableName && "border-red-500",
                 )}
               />
 
@@ -158,7 +147,7 @@ export const GeminiDialog = memo(function GeminiDialog({
                         "py-6 px-4 rounded-xl border-black/10 dark:border-white/10",
                         "bg-black/2 dark:bg-white/5",
                         "focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20",
-                        "transition-all duration-200"
+                        "transition-all duration-200",
                       )}
                     >
                       <SelectValue placeholder="Select a model" />
@@ -211,7 +200,7 @@ export const GeminiDialog = memo(function GeminiDialog({
                   "bg-black/2 dark:bg-white/5",
                   "placeholder:text-neutral-400 dark:placeholder:text-white/30",
                   "focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none",
-                  "transition-all duration-200 resize-none"
+                  "transition-all duration-200 resize-none",
                 )}
               />
 
@@ -240,7 +229,7 @@ export const GeminiDialog = memo(function GeminiDialog({
                   "focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none",
                   "transition-all duration-200 resize-y min-h-[100px]",
                   form.formState.errors.userPrompt &&
-                    "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                    "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                 )}
               />
 
@@ -259,31 +248,13 @@ export const GeminiDialog = memo(function GeminiDialog({
               )}
             </div>
 
-            {/* API Key */}
-            <details className="group">
-              <summary className="flex cursor-pointer items-center gap-2 text-sm text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors select-none py-2">
-                <Key className="size-3.5" />
-                <span>API Key Settings</span>
-                <ChevronDown className="size-3.5 ml-auto transition-transform group-open:rotate-180" />
-              </summary>
-
-              <div className="pt-2 space-y-2">
-                <Input
-                  {...form.register("geminiApiKey")}
-                  type="password"
-                  placeholder="Enter custom API key (optional)"
-                  className={cn(
-                    "h-11 rounded-xl border-black/10 dark:border-white/10",
-                    "bg-black/2 dark:bg-white/5",
-                    "focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20",
-                    "transition-all duration-200"
-                  )}
-                />
-                <p className="text-xs text-neutral-500 dark:text-white/40">
-                  Leave empty to use the default environment key.
-                </p>
-              </div>
-            </details>
+            {/* Credential Selector */}
+            <CredentialSelector
+              credentialType="GEMINI"
+              control={form.control}
+              name="credentialId"
+              accentColor="indigo"
+            />
           </DialogPanel>
 
           {/* Footer */}

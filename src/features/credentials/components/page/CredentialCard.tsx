@@ -56,17 +56,9 @@ export function CredentialCard({
   type,
   createdAt,
 }: CredentialCardProps) {
-  const [copied, setCopied] = useState(false);
   const Icon = getCredentialIcon(type);
   const label = getCredentialLabel(type);
   const theme = providerThemes[type];
-
-  const handleCopy = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <Link
@@ -127,22 +119,6 @@ export function CredentialCard({
               <Icon className="size-6" />
             </div>
           </div>
-
-          {/* Actions */}
-          <button
-            onClick={handleCopy}
-            className={cn(
-              "flex size-8 items-center justify-center rounded-lg",
-              "bg-white/5 hover:bg-white/10 transition-colors",
-              "opacity-0 group-hover:opacity-100"
-            )}
-          >
-            {copied ? (
-              <Check className="size-4 text-emerald-400" />
-            ) : (
-              <Copy className="size-4 text-white/50" />
-            )}
-          </button>
         </div>
 
         {/* Content */}

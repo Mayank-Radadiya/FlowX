@@ -19,7 +19,7 @@ type AnthropicNodeData = {
   model?: AnthropicModel;
   systemPrompt?: string;
   userPrompt?: string;
-  anthropicApiKey?: string;
+  credentialId?: string;
 };
 
 type AnthropicNodeProps = Node<AnthropicNodeData>;
@@ -51,8 +51,8 @@ const AnthropicNode = (props: NodeProps<AnthropicNodeProps>) => {
       nds.map((node) =>
         node.id === props.id
           ? { ...node, data: { ...node.data, ...values } }
-          : node
-      )
+          : node,
+      ),
     );
   };
 
@@ -62,15 +62,15 @@ const AnthropicNode = (props: NodeProps<AnthropicNodeProps>) => {
       model: nodeData.model,
       systemPrompt: nodeData.systemPrompt,
       userPrompt: nodeData.userPrompt,
-      anthropicApiKey: nodeData.anthropicApiKey,
+      credentialId: nodeData.credentialId,
     }),
     [
       nodeData.variableName,
       nodeData.model,
       nodeData.systemPrompt,
       nodeData.userPrompt,
-      nodeData.anthropicApiKey,
-    ]
+      nodeData.credentialId,
+    ],
   );
 
   return (

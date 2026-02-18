@@ -41,9 +41,9 @@ export const SidebarHeader = memo(() => {
     <Link href="/" className="flex items-center gap-3 px-3 py-2">
       {/* Logo container */}
       <motion.div
-        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-background/50 shadow-sm ring-1 ring-border hover:ring-1 hover:ring-primary transition-all"
-        whileHover={{ scale: 1.06 }}     // Slight scale-up on hover
-        whileTap={{ scale: 0.95 }}       // Press-down effect on click
+        className="flex h-11 w-11 p-1 shrink-0 items-center justify-center rounded-xl bg-background/50 shadow-sm ring-1 ring-border hover:ring-1 hover:ring-primary transition-all"
+        whileHover={{ scale: 1.06 }} // Slight scale-up on hover
+        whileTap={{ scale: 0.95 }} // Press-down effect on click
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
         <Image
@@ -51,6 +51,7 @@ export const SidebarHeader = memo(() => {
           alt="FlowX logo"
           width={36}
           height={36}
+          style={{ width: "auto", height: "auto" }}
           priority
         />
       </motion.div>
@@ -59,9 +60,9 @@ export const SidebarHeader = memo(() => {
       <AnimatePresence initial={false}>
         {showText && (
           <motion.div
-            initial={{ opacity: 0, x: -8 }}   // Enter from left
-            animate={{ opacity: 1, x: 0 }}    // Fully visible
-            exit={{ opacity: 0, x: -8 }}      // Exit to left
+            initial={{ opacity: 0, x: -8 }} // Enter from left
+            animate={{ opacity: 1, x: 0 }} // Fully visible
+            exit={{ opacity: 0, x: -8 }} // Exit to left
             transition={{ duration: 0.25 }}
             className="flex flex-col leading-tight absolute left-22 top-8"
           >

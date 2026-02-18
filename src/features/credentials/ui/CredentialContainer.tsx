@@ -2,23 +2,27 @@
  * CredentialContainer Component
  * -----------------------------
  * Minimal container for credentials - content-focused design.
+ * Note: Pagination is rendered inside CredentialItems (within Suspense boundary)
+ * to avoid hydration mismatch issues.
  */
 
 "use client";
 
 import type { ReactNode } from "react";
-import PaginationUi from "@/components/global/pagination/PaginationUi";
 import { Search } from "lucide-react";
-import { useCredentialsPagination } from "../hooks/use-credential";
 import { cn } from "@/lib/utils";
+import { useCredentialsParams } from "../hooks/use-credential-params";
 
 interface CredentialContainerProps {
   children: ReactNode;
 }
 
 function CredentialContainer({ children }: CredentialContainerProps) {
-  const { currentPage, totalPages, search, setSearch } =
-    useCredentialsPagination();
+  const [params, setParams] = useCredentialsParams();
+
+  const setSearch = (search: string) => {
+    setParams({ ...params, search, page: 1 });
+  };
 
   return (
     <div className="space-y-6">
@@ -28,7 +32,7 @@ function CredentialContainer({ children }: CredentialContainerProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-white/30" />
           <input
             type="text"
-            value={search}
+            value={params.search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search credentials..."
             className={cn(
@@ -42,15 +46,8 @@ function CredentialContainer({ children }: CredentialContainerProps) {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="min-h-[300px]">{children}</div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-end pt-4 border-t border-white/10">
-          <PaginationUi currentPage={currentPage} totalPages={totalPages} />
-        </div>
-      )}
+      {/* Content (includes pagination via CredentialItems) */}
+      <div>{children}</div>
     </div>
   );
 }

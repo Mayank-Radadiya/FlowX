@@ -1,16 +1,17 @@
-import { models, NonRetriableError, step } from "inngest";
+import { NonRetriableError } from "inngest";
 import { NodeExecutor } from "../types";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import handlebars from "handlebars";
 import { geminiChannel } from "@/inngest/channel/gemini";
+import { prisma } from "@/lib/db";
 
 type GeminiExecutorParams = {
   variableName?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
-  geminiApiKey?: string;
+  credentialId?: string;
 };
 
 handlebars.registerHelper("json", function (context) {
@@ -36,7 +37,7 @@ export const geminiExecutor: NodeExecutor<GeminiExecutorParams> = async ({
       geminiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("Variable name is required");
   }
@@ -46,7 +47,7 @@ export const geminiExecutor: NodeExecutor<GeminiExecutorParams> = async ({
       geminiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("User prompt is required");
   }
@@ -59,7 +60,20 @@ export const geminiExecutor: NodeExecutor<GeminiExecutorParams> = async ({
     ? handlebars.compile(data.userPrompt)(context)
     : "What can I help you with?";
 
-  const apiKey = data.geminiApiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  // Resolve API key: credential from vault > environment variable
+  let apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+
+  if (data.credentialId) {
+    const credential = await prisma.credential.findUnique({
+      where: { id: data.credentialId },
+      select: { value: true },
+    });
+
+    if (credential?.value) {
+      apiKey = credential.value;
+    }
+  }
+
   const google = createGoogleGenerativeAI({
     apiKey,
   });
@@ -83,7 +97,7 @@ export const geminiExecutor: NodeExecutor<GeminiExecutorParams> = async ({
       geminiChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return {
@@ -97,7 +111,7 @@ export const geminiExecutor: NodeExecutor<GeminiExecutorParams> = async ({
       geminiChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

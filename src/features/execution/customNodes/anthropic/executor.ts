@@ -4,13 +4,14 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 import handlebars from "handlebars";
 import { anthropicChannel } from "@/inngest/channel/anthropic";
+import { prisma } from "@/lib/db";
 
 type AnthropicExecutorParams = {
   variableName?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
-  anthropicApiKey?: string;
+  credentialId?: string;
 };
 
 handlebars.registerHelper("json", function (context) {
@@ -36,7 +37,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicExecutorParams> = async ({
       anthropicChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("Variable name is required");
   }
@@ -46,7 +47,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicExecutorParams> = async ({
       anthropicChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw new NonRetriableError("User prompt is required");
   }
@@ -59,7 +60,20 @@ export const anthropicExecutor: NodeExecutor<AnthropicExecutorParams> = async ({
     ? handlebars.compile(data.userPrompt)(context)
     : "What can I help you with?";
 
-  const apiKey = data.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
+  // Resolve API key: credential from vault > environment variable
+  let apiKey = process.env.ANTHROPIC_API_KEY;
+
+  if (data.credentialId) {
+    const credential = await prisma.credential.findUnique({
+      where: { id: data.credentialId },
+      select: { value: true },
+    });
+
+    if (credential?.value) {
+      apiKey = credential.value;
+    }
+  }
+
   const anthropic = createAnthropic({
     apiKey,
   });
@@ -82,7 +96,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicExecutorParams> = async ({
       anthropicChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return {
@@ -96,7 +110,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicExecutorParams> = async ({
       anthropicChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

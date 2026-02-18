@@ -7,7 +7,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GeminiFormValues, geminiSchema } from "./gemini.schema";
-import { DEFAULT_MODEL, GEMINI_API_KEY } from "./gemini.constants";
+import { DEFAULT_MODEL } from "./gemini.constants";
 
 interface UseGeminiFormProps {
   /** Existing form values for editing */
@@ -30,7 +30,7 @@ export function useGeminiForm({
       model: defaultData.model || DEFAULT_MODEL,
       systemPrompt: defaultData.systemPrompt || "",
       userPrompt: defaultData.userPrompt || "",
-      geminiApiKey: defaultData.geminiApiKey || GEMINI_API_KEY,
+      credentialId: defaultData.credentialId || "",
     },
   });
 

@@ -41,8 +41,5 @@ export const AVAILABLE_MODELS = [
 /** Model value type derived from AVAILABLE_MODELS */
 export type GeminiModel = (typeof AVAILABLE_MODELS)[number]["value"];
 
-/** Default Gemini API key from environment */
-export const GEMINI_API_KEY = process.env.GOOGLE_GENERATIVE_AI_API_KEY || "";
-
 /** Default model selection */
 export const DEFAULT_MODEL: GeminiModel = "gemini-2.5-flash";

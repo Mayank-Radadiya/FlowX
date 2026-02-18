@@ -30,6 +30,8 @@ export const SecretKeyCard = memo(function SecretKeyCard({
     copyToClipboard,
   } = useRevealSecret(credentialId);
 
+  console.log("isLoading", isLoading, canCopy, hide);
+
   return (
     <div className="col-span-2 p-4 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10">
       <div className="flex items-center justify-between">

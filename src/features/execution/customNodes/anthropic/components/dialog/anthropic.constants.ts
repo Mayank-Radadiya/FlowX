@@ -36,8 +36,5 @@ export const AVAILABLE_MODELS = [
 /** Model value type derived from AVAILABLE_MODELS */
 export type AnthropicModel = (typeof AVAILABLE_MODELS)[number]["value"];
 
-/** Default Anthropic API key from environment */
-export const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
-
 /** Default model selection */
 export const DEFAULT_MODEL: AnthropicModel = "claude-3-5-sonnet-20241022";

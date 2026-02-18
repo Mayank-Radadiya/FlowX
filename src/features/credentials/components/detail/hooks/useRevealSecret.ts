@@ -17,10 +17,7 @@ export function useRevealSecret(credentialId: string) {
     isRevealed
   );
 
-  // Mask the key - show first 4 chars only when revealed
-  const maskedKey = secretData?.value
-    ? `${secretData.value.slice(0, 4)}${"•".repeat(16)}`
-    : "sk-••••••••••••";
+  const maskedKey = secretData?.value ? `${secretData.value}` : "••••••••••••";
 
   const reveal = useCallback(() => {
     setIsRevealed(true);

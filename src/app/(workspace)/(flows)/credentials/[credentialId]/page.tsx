@@ -1,6 +1,8 @@
 import { requiredAuth } from "@/features/auth/server/guards";
 import { HydrateClient } from "@/trpc/server";
 import { CredentialDetailPage } from "@/features/credentials/components/detail";
+import { prefetchCredentialById } from "@/features/credentials/server/prefetch";
+
 interface Props {
   params: Promise<{ credentialId: string }>;
 }
@@ -8,6 +10,9 @@ interface Props {
 async function CredentialPage({ params }: Props) {
   await requiredAuth();
   const { credentialId } = await params;
+
+  // Prefetch credential data to hydrate React Query cache
+  prefetchCredentialById(credentialId);
 
   return (
     <div className="flex flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
