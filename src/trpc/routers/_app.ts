@@ -8,12 +8,15 @@ import { executeWorkflowRoute } from "@/features/execution/server/route";
 import { createTRPCRouter } from "../init";
 import { workflowRouter } from "@/features/workflows/server/route";
 import { credentialRouter } from "@/features/credentials/server/route";
+import { executionHistoryRouter } from "@/features/execution/server/history-route";
 
 // Root TRPC router that groups all procedure endpoints
 export const appRouter = createTRPCRouter({
   workflows: workflowRouter,
   executeWorkflow: executeWorkflowRoute,
   credentials: credentialRouter,
+  // executionLogs is now served by executionHistory (with backward-compat aliases)
+  executionLogs: executionHistoryRouter,
 });
 
 // Export API type for full type-safety across client and server

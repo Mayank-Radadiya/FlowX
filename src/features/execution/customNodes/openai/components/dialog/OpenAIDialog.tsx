@@ -250,6 +250,7 @@ export const OpenAIDialog = memo(function OpenAIDialog({
 
             {/* Credential Selector */}
             <CredentialSelector
+              formState={form.formState}
               credentialType="OPENAI"
               control={form.control}
               name="credentialId"

@@ -33,7 +33,7 @@ export const anthropicSchema = z.object({
   userPrompt: z.string().min(1, "User prompt is required"),
 
   /** Optional credential ID from the Credentials vault */
-  credentialId: z.string().optional(),
+  credentialId: z.string().min(1, "Credential is required"),
 });
 
 export type AnthropicFormValues = z.infer<typeof anthropicSchema>;

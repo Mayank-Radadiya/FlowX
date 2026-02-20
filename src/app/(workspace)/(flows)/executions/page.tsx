@@ -1,22 +1,33 @@
 import { PageHeader } from "@/components/global/PageHeader/PageHeader";
 import { requiredAuth } from "@/features/auth/server/guards";
+import { HydrateClient } from "@/trpc/server";
+import { prefetchExecutionHistory } from "@/features/execution/server/prefetch";
+import { ExecutionHistoryView } from "@/features/execution/components/ExecutionHistoryView";
 import { Activity } from "lucide-react";
-import { CredentialListBoundary } from "@/features/credentials/components/page/CredentialListBoundary";
+
+export const metadata = {
+  title: "Executions | FlowX",
+  description:
+    "Monitor and debug all your workflow executions in real-time.",
+};
 
 async function ExecutionsPage() {
   await requiredAuth();
+  await prefetchExecutionHistory();
 
   return (
-    <div className="flex flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
-      <PageHeader
-        title="Executions"
-        subtitle="Analytics"
-        description="Real-time monitoring and detailed logs for all your workflow runs."
-        icon={<Activity className="size-6" />}
-        gradient="orange"
-      />
-      <CredentialListBoundary />
-    </div>
+    <HydrateClient>
+      <div className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <PageHeader
+          title="Executions"
+          subtitle="Monitoring"
+          description="Real-time monitoring and detailed logs for all your workflow runs."
+          icon={<Activity className="size-6" />}
+          gradient="orange"
+        />
+        <ExecutionHistoryView />
+      </div>
+    </HydrateClient>
   );
 }
 

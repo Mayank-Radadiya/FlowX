@@ -1,5 +1,6 @@
 import { EditorBreadcrumb } from "./EditorBreadcrumb";
 import { EditorActions } from "./EditorActions";
+import { WorkflowLogsSheet } from "@/features/execution/components/WorkflowLogsSheet";
 
 interface EditorHeaderProps {
   workflowName: string;
@@ -22,6 +23,7 @@ export function EditorHeader({
 
       {/* Right - Actions */}
       <div className="flex items-center gap-1.5">
+        <WorkflowLogsSheet workflowId={workflowId} />
         <EditorActions workflowId={workflowId} onRun={onRun} />
       </div>
     </header>

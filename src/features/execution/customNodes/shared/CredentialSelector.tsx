@@ -7,7 +7,7 @@
 
 "use client";
 
-import { Controller, type Control } from "react-hook-form";
+import { Controller, FormState, type Control } from "react-hook-form";
 import { Key, ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { CredentialType } from "@prisma/client";
@@ -32,6 +32,7 @@ const CREDENTIAL_LABELS: Record<CredentialType, string> = {
 
 interface CredentialSelectorProps {
   credentialType: CredentialType;
+  formState: FormState<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
   name: string;
@@ -42,6 +43,7 @@ export function CredentialSelector({
   credentialType,
   control,
   name,
+  formState,
   accentColor = "indigo",
 }: CredentialSelectorProps) {
   const { data: credentials, isLoading } =
@@ -55,7 +57,7 @@ export function CredentialSelector({
         <Key className="size-3.5" />
         Credential
         <span className="text-xs font-normal text-neutral-400 dark:text-white/40">
-          (optional)
+          (required)
         </span>
       </Label>
 
@@ -133,6 +135,11 @@ export function CredentialSelector({
             <ExternalLink className="size-3" />
           </Link>
         </div>
+      )}
+      {formState?.errors?.[name] && (
+        <p className="text-xs text-red-500 dark:text-red-400">
+          {formState.errors[name]?.message as string}
+        </p>
       )}
 
       <p className="text-xs text-neutral-500 dark:text-white/40">

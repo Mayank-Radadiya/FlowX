@@ -251,6 +251,7 @@ export const GeminiDialog = memo(function GeminiDialog({
             {/* Credential Selector */}
             <CredentialSelector
               credentialType="GEMINI"
+              formState={form.formState}
               control={form.control}
               name="credentialId"
               accentColor="indigo"

@@ -88,6 +88,7 @@ model Workflow {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   nodes     Node[]
   connections Connection[]
+  executions WorkflowExecution[]
 }
 
 enum NodeType {
@@ -116,6 +117,8 @@ model Node {
 
   credentialId String?
   credential   Credential? @relation(fields: [credentialId], references: [id])
+
+  executionLogs ExecutionLog[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -162,5 +165,74 @@ model Credential {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   Node     Node[]
+}
+
+enum ExecutionStatus {
+  QUEUED
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum TriggerType {
+  MANUAL
+  WEBHOOK
+  SCHEDULE
+  API
+}
+
+model WorkflowExecution {
+  id          String   @id @default(cuid())
+  workflowId  String
+  workflow    Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  status      ExecutionStatus @default(PENDING)
+  triggerType TriggerType     @default(MANUAL)
+
+  // Timing
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  // Metadata stored at execution time (snapshot of workflow name)
+  workflowName String?
+
+  logs        ExecutionLog[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([workflowId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model ExecutionLog {
+  id            String   @id @default(cuid())
+
+  executionId   String
+  execution     WorkflowExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+
+  nodeId        String
+  node          Node     @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  // Node metadata snapshot (captured at execution time)
+  nodeName      String?
+  nodeType      String?
+
+  status        ExecutionStatus @default(PENDING)
+  inputContext  Json?
+  outputContext Json?
+  error         String?
+
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([executionId])
+  @@index([nodeId])
 }
 

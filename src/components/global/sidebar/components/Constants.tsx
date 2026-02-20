@@ -22,11 +22,6 @@ import { Activity, GitBranch, KeyRound, LayoutDashboard } from "lucide-react";
  */
 export const NAV_ITEMS = [
   {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: <LayoutDashboard size={18} strokeWidth={1.7} />,
-  },
-  {
     label: "Workflows",
     href: "/workflow",
     icon: <GitBranch size={18} strokeWidth={1.7} />,

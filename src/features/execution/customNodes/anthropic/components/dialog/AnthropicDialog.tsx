@@ -250,6 +250,7 @@ export const AnthropicDialog = memo(function AnthropicDialog({
 
             {/* Credential Selector */}
             <CredentialSelector
+              formState={form.formState}
               credentialType="ANTHROPIC"
               control={form.control}
               name="credentialId"
