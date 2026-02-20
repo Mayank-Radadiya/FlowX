@@ -55,12 +55,8 @@ function BaseVisualNode({
   const statusStyle = nodeStatusVariants[status] || nodeStatusVariants.default;
   const [isHovered, setIsHovered] = useState(false);
 
-  // Border color: status takes precedence, then selected state, else normal color
-  const borderClass =
-    statusStyle.border ||
-    (selected
-      ? `border-2 ${styles.border}`
-      : `border border-black/5 dark:border-white/5`);
+  // Border color: status takes precedence over default color
+  const borderClass = statusStyle.border || `border ${styles.border}`;
 
   return (
     <>
@@ -93,21 +89,21 @@ function BaseVisualNode({
           </div>
         )}
 
-        {/* Unified Glass Layer Node (Option A) */}
+        {/* Solid Layout Node (Minimalist Option A) */}
         <div
           onClick={onClick}
           onDoubleClick={onDoubleClick}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className={cn(
-            "relative flex flex-col justify-center min-w-[240px] max-w-[320px] rounded-2xl",
-            "transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "cursor-pointer shadow-sm hover:shadow-md",
+            "relative flex flex-col justify-center min-w-[240px] max-w-[320px] rounded-xl outline-hidden",
+            "transition-all duration-200 ease-out cursor-pointer",
             borderClass,
             styles.bg,
             !selected && styles.bgHover,
-            selected &&
-              "shadow-[0_0_0_2px_rgba(0,0,0,0.05)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.05)] scale-[1.02]",
+            selected
+              ? "ring-1 ring-ring shadow-md"
+              : "shadow-sm hover:shadow-md",
           )}
         >
           {/* Main Horizontal Content */}
@@ -185,9 +181,9 @@ function BaseVisualNode({
               type="target"
               position={Position.Left}
               className={cn(
-                "w-3! h-3! -left-1.5! border-2! rounded-full! transition-all duration-200",
+                "w-2! h-4! -left-1! rounded-sm! border-2! transition-all duration-200",
                 selected ? styles.handleSelected : styles.handle,
-                "hover:scale-150! hover:border-black/20 dark:hover:border-white/20",
+                "hover:-left-1.5! hover:w-3!",
               )}
             />
           )}
@@ -199,9 +195,9 @@ function BaseVisualNode({
               type="source"
               position={Position.Right}
               className={cn(
-                "w-3! h-3! -right-1.5! border-2! rounded-full! transition-all duration-200",
+                "w-2! h-4! -right-1! rounded-sm! border-2! transition-all duration-200",
                 selected ? styles.handleSelected : styles.handle,
-                "hover:scale-150! hover:border-black/20 dark:hover:border-white/20",
+                "hover:-right-1.5! hover:w-3!",
               )}
             />
           )}

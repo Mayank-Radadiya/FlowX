@@ -27,7 +27,7 @@ export const EditorSaveButton = ({ workflowId }: EditorSaveButtonProps) => {
       onClick={save}
       disabled={!canSave || isSaving}
       className={cn(
-        "relative flex w-24 items-center gap-2 rounded-xl px-4 py-1.5 text-sm font-medium",
+        "relative flex w-28 items-center justify-center gap-2 rounded-xl px-4 py-1.5 text-sm font-medium",
         "border backdrop-blur-md transition-all duration-300",
         "bg-white/60 dark:bg-neutral-900/40",
         "border-neutral-300/60 dark:border-neutral-700/60",
@@ -45,7 +45,7 @@ export const EditorSaveButton = ({ workflowId }: EditorSaveButtonProps) => {
         <Save className="size-4" />
       )}
 
-      <span>{isSaving ? "Saving..." : showSuccess ? "Saved" : "Save"}</span>
+      <span>{isSaving ? "Saving.." : showSuccess ? "Saved" : "Save"}</span>
     </button>
   );
 };

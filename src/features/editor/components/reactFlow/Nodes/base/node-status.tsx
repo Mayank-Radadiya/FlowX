@@ -2,7 +2,7 @@
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export const nodeStatusVariants = {
-  default: { border: undefined, icon: null as React.ReactNode  },
+  default: { border: undefined, icon: null as React.ReactNode },
   loading: {
     border: "border-blue-400",
     icon: <Loader2 className="size-5 animate-spin text-blue-500" />,

@@ -46,13 +46,20 @@ export function useCreateWorkflowForm(onSuccess?: () => void) {
    * - Converts empty strings to `undefined`
    *   so optional fields are omitted
    */
-  const submit = () => {
+  const submit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
     mutate(
       {
         name: nameRef.current?.value.trim() || undefined,
         description: descriptionRef.current?.value.trim() || undefined,
       },
-      { onSuccess }
+      {
+        onSuccess: () => {
+          onSuccess?.();
+          reset();
+        },
+      },
     );
   };
 

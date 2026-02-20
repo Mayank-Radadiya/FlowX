@@ -32,7 +32,7 @@ export function ToolbarButton({
           "hover:bg-red-50 dark:hover:bg-red-500/10",
           "hover:border-red-200 dark:hover:border-red-500/30",
           "hover:text-red-600 dark:hover:text-red-400",
-        ]
+        ],
       )}
     >
       {" "}

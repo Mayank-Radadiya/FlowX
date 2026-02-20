@@ -2,6 +2,7 @@
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -9,7 +10,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   History,
   Activity,
@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Code2,
   Loader2,
+  X as XIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { useTRPC } from "@/trpc/client";
@@ -107,27 +108,29 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
       return null;
 
     return (
-      <div className="mt-3 group rounded-xl overflow-hidden border border-black/5 dark:border-white/5 bg-slate-950/50 backdrop-blur-md">
-        <div className="flex items-center gap-2 px-3 py-2 bg-slate-900/50 border-b border-white/5">
+      <div className="mt-3 w-full max-w-full group rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-900/50">
+        <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-950/50 border-b border-slate-200 dark:border-white/5">
           <Code2
             className={cn(
               "w-3.5 h-3.5",
               type === "output"
-                ? "text-emerald-400"
+                ? "text-emerald-500 dark:text-emerald-400"
                 : type === "error"
-                  ? "text-rose-400"
-                  : "text-slate-400",
+                  ? "text-rose-500 dark:text-rose-400"
+                  : "text-slate-500 dark:text-slate-400",
             )}
           />
-          <span className="text-[10px] font-medium text-slate-300 uppercase tracking-wider">
+          <span className="text-[10px] font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
             {title}
           </span>
         </div>
-        <div className="p-3 overflow-x-auto">
+        <div className="p-3 w-full max-w-full overflow-x-auto">
           <pre
             className={cn(
-              "text-[11px] leading-relaxed font-mono",
-              type === "error" ? "text-rose-400" : "text-slate-300",
+              "text-[11px] leading-relaxed font-mono w-max min-w-full",
+              type === "error"
+                ? "text-rose-600 dark:text-rose-400"
+                : "text-slate-700 dark:text-slate-300",
             )}
           >
             {typeof data === "string" ? data : JSON.stringify(data, null, 2)}
@@ -146,9 +149,12 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
         </div>
       </SheetTrigger>
 
-      <SheetContent className="w-full sm:w-[600px] sm:max-w-none flex flex-col p-0 border-l border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-slate-950/50 backdrop-blur-xl">
+      <SheetContent
+        showCloseButton={false}
+        className="w-full sm:w-[670px] sm:max-w-none p-0 border-l border-slate-200 dark:border-slate-800 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-xl shadow-2xl overflow-hidden"
+      >
         {/* Header */}
-        <SheetHeader className="p-6 border-b border-black/5 dark:border-white/5 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-20">
+        <SheetHeader className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-20 shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <SheetTitle className="flex items-center gap-2 text-lg">
@@ -164,22 +170,30 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
               </SheetDescription>
             </div>
 
-            {/* Context Badge */}
-            {selectedExecutionId && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                <span className="text-[10px] font-mono text-muted-foreground uppercase">
-                  ID: {selectedExecutionId.slice(-6)}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              {/* Context Badge */}
+              {selectedExecutionId && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                  <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                    ID: {selectedExecutionId.slice(-6)}
+                  </span>
+                </div>
+              )}
+
+              {/* Close Button */}
+              <SheetClose className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                <XIcon className="size-4" />
+                <span className="sr-only">Close</span>
+              </SheetClose>
+            </div>
           </div>
         </SheetHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col h-full relative">
+        <div className="flex-1 min-h-0 w-full overflow-y-auto">
           {!selectedExecutionId ? (
             // LIST VIEW
-            <ScrollArea className="flex-1 p-6">
-              <div className="space-y-4">
+            <div>
+              <div className="space-y-4 p-6">
                 {isLoadingExecutions && (
                   <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
                     <Loader2 className="w-6 h-6 animate-spin mb-4 opacity-50" />
@@ -262,12 +276,12 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
                   </div>
                 ))}
               </div>
-            </ScrollArea>
+            </div>
           ) : (
             // DETAILS VIEW
-            <div className="flex flex-col h-full bg-slate-50/30 dark:bg-slate-950/30">
+            <div className="bg-slate-50/30 dark:bg-slate-950/30">
               {/* Toolbar */}
-              <div className="px-4 py-3 border-b border-black/5 dark:border-white/5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between">
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10 sticky top-0 flex items-center justify-between">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -287,8 +301,8 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
                 </div>
               </div>
 
-              <ScrollArea className="flex-1 p-6">
-                <div className="max-w-2xl mx-auto space-y-6">
+              <div>
+                <div className="max-w-2xl mx-auto space-y-6 p-6 pb-20">
                   {isLoadingLogs && (
                     <div className="flex justify-center p-8">
                       <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
@@ -317,8 +331,8 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
                           </div>
 
                           {/* Content Card */}
-                          <div className="bg-white dark:bg-slate-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 border-b border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-slate-950/50">
+                          <div className="w-full max-w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80">
                               <div className="flex items-center gap-3">
                                 <span className="font-semibold text-sm text-foreground">
                                   {log.nodeId}
@@ -378,7 +392,7 @@ export function WorkflowLogsSheet({ workflowId }: WorkflowLogsSheetProps) {
                       </div>
                     )}
                 </div>
-              </ScrollArea>
+              </div>
             </div>
           )}
         </div>
