@@ -8,7 +8,7 @@
  * hardcoding routes or labels.
  */
 
-import { Activity, GitBranch, KeyRound, LayoutDashboard } from "lucide-react";
+import { Activity, GitBranch, KeyRound, BookOpen } from "lucide-react";
 
 /**
  * NAV_ITEMS
@@ -35,5 +35,10 @@ export const NAV_ITEMS = [
     label: "Executions",
     href: "/executions",
     icon: <Activity size={18} strokeWidth={1.7} />,
+  },
+  {
+    label: "Guide",
+    href: "/guide",
+    icon: <BookOpen size={18} strokeWidth={1.7} />,
   },
 ];

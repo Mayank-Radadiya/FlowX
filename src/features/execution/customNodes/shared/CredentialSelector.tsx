@@ -57,7 +57,7 @@ export function CredentialSelector({
         <Key className="size-3.5" />
         Credential
         <span className="text-xs font-normal text-neutral-400 dark:text-white/40">
-          (required)
+          {credentialType === "GEMINI" ? "(optional)" : "(*required)"}
         </span>
       </Label>
 
@@ -91,14 +91,17 @@ export function CredentialSelector({
               </SelectTrigger>
 
               <SelectContent className="rounded-xl border-black/10 dark:border-white/10">
-                <SelectItem
-                  value="__none__"
-                  className="cursor-pointer rounded-lg my-0.5"
-                >
-                  <span className="text-neutral-500 dark:text-white/50">
-                    Use environment key (default)
-                  </span>
-                </SelectItem>
+                {credentialType === "GEMINI" && (
+                  // Only for gemini free API key.
+                  <SelectItem
+                    value="__none__"
+                    className="cursor-pointer rounded-lg my-0.5"
+                  >
+                    <span className="text-neutral-500 dark:text-white/50">
+                      Use environment key (default)
+                    </span>
+                  </SelectItem>
+                )}
 
                 {credentials.map((cred) => (
                   <SelectItem
@@ -143,7 +146,7 @@ export function CredentialSelector({
       )}
 
       <p className="text-xs text-neutral-500 dark:text-white/40">
-        Select a saved credential or leave empty to use the environment key.
+        Select a saved credential.
       </p>
     </div>
   );

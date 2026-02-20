@@ -11,7 +11,6 @@ interface EditorHeaderProps {
 
 export function EditorHeader({
   workflowName,
-  onRun,
   workflowId,
 }: EditorHeaderProps) {
   return (
@@ -23,8 +22,8 @@ export function EditorHeader({
 
       {/* Right - Actions */}
       <div className="flex items-center gap-1.5">
+        <EditorActions workflowId={workflowId} />
         <WorkflowLogsSheet workflowId={workflowId} />
-        <EditorActions workflowId={workflowId} onRun={onRun} />
       </div>
     </header>
   );
