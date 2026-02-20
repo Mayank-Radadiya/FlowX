@@ -24,10 +24,10 @@ const SignUpForm = () => {
     <div className="">
       {/* Animated container for smooth entry */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}      // Start hidden and lower
-        animate={{ opacity: 1, y: 0 }}       // Fade in and slide upward
+        initial={{ opacity: 0, y: 40 }} // Start hidden and lower
+        animate={{ opacity: 1, y: 0 }} // Fade in and slide upward
         transition={{ duration: 0.5, delay: 0.2 }} // Smooth entrance timing
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-[480px] relative z-10"
       >
         {/* AuthCard switches UI copy and links for sign-up */}
         <AuthCard formType="sign-up">

@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { LogOut } from "lucide-react";
 import { User } from "@prisma/client";
 import { useSidebar } from "./SidebarContext";
+import Image from "next/image";
 
 interface SidebarUserProps {
   name: string | null;
@@ -70,8 +71,10 @@ export const SidebarUser = memo(function SidebarUser({
         transition={{ type: "spring", stiffness: 300 }}
       >
         {image ? (
-          <img
-            src={image}
+          <Image
+            src={image || ""}
+            width={40}
+            height={40}
             alt={name ?? "User"}
             className="h-full w-full rounded-full object-cover"
           />

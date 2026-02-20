@@ -110,14 +110,14 @@ const AuthLayoutStructure = ({ children }: AuthLayoutProps) => {
           <p className="text-center text-xs text-muted-foreground mt-6">
             By signing in, you agree to our{" "}
             <Link
-              href="/legal/terms-of-service"
+              href="/"
               className="font-medium text-primary underline-offset-4 hover:underline transition-colors"
             >
               Terms of Service
             </Link>
             {" and "}
             <Link
-              href="/legal/privacy-policy"
+              href="/"
               className="font-medium text-primary underline-offset-4 hover:underline transition-colors"
             >
               Privacy Policy

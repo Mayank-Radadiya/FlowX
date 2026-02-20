@@ -35,17 +35,13 @@ export function PasswordField(props: PasswordFieldProps) {
 
   return (
     <>
-      {/* Input label */}
-      <Label htmlFor={props.id || "password"} className="text-sm">
-        {props.label || "Password"}
-      </Label>
-
       {/* Input wrapper for positioning toggle button */}
       <div className="relative mt-1">
         <Input
           {...props}
           className="h-11 pr-10 bg-background/50 backdrop-blur-sm hover:border-primary/50 focus:border-primary transition-colors"
           type={show ? "text" : "password"} // Toggle input type
+          placeholder={props.placeholder || "Enter your password"}
         />
 
         {/* Toggle password visibility button */}

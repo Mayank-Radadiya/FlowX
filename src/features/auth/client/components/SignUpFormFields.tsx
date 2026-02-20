@@ -24,7 +24,6 @@ import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "./PasswordField";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 const SignUpFormFields = () => {
@@ -87,77 +86,74 @@ const SignUpFormFields = () => {
   return (
     <>
       <form
-        className="space-y-4"
+        className="space-y-5"
         aria-busy={isSubmitting}
         onSubmit={handleSubmit(handleSignUp)}
       >
-        {/* ---------------- Email Field ---------------- */}
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-
+        {/* Email */}
+        <div className="space-y-1.5">
+          <label
+            htmlFor="email"
+            className="text-xs font-medium text-muted-foreground uppercase tracking-wide"
+          >
+            Email
+          </label>
           <Input
             id="email"
             {...register("email")}
             type="email"
             placeholder="name@example.com"
             required
-            className="h-11 bg-background/50 backdrop-blur-sm hover:border-primary/50 focus:border-primary transition-colors mt-1.5"
+            className="h-10 bg-background/50 border-border/60 hover:border-border focus:border-primary/70 transition-colors  mt-1.5"
             aria-invalid={!!errors.email}
           />
-
           {errors.email && (
-            <p className="text-xs text-destructive mt-1">
-              {errors.email.message}
-            </p>
+            <p className="text-xs text-destructive">{errors.email.message}</p>
           )}
         </div>
 
-        {/* ---------------- Password Field ---------------- */}
-        <div className="space-y-2">
+        {/* Password */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Password
+          </label>
           <PasswordField {...register("password")} label="Password" />
-
           {errors.password && (
-            <p className="text-xs text-destructive mt-1">
+            <p className="text-xs text-destructive">
               {errors.password.message}
             </p>
           )}
         </div>
 
-        {/* ---------------- Confirm Password Field ---------------- */}
-        <div className="space-y-2">
+        {/* Confirm Password */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Confirm Password
+          </label>
           <PasswordField
             {...register("confirmPassword")}
             label="Confirm Password"
           />
-
           {errors.confirmPassword && (
-            <p className="text-xs text-destructive mt-1">
+            <p className="text-xs text-destructive">
               {errors.confirmPassword.message}
             </p>
           )}
         </div>
 
-        {/* Placeholder for CAPTCHA or bot protection */}
-        <div id="clerk-captcha" className="mt-5" />
-
-        {/* ---------------- Submit Button ---------------- */}
+        {/* Submit */}
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="h-10 w-full rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-r from-primary to-primary/90 font-medium relative overflow-hidden group mt-4 text-white"
+          className="h-10 w-full rounded-xl bg-primary font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 text-white "
         >
-          {/* Animated shimmer effect */}
-          <span className="absolute top-0 w-12 h-full bg-white/20 transform -translate-x-full skew-x-[-20deg] group-hover:translate-x-[750%] transition-transform duration-2000"></span>
-          <span className="absolute top-0 -left-5 w-12 h-full bg-white/20 transform -translate-x-full skew-x-[-20deg] group-hover:translate-x-[350%] transition-transform duration-3000"></span>
-
-          {/* Button content */}
           {isSubmitting ? (
             <>
               <Loader className="mr-2 h-4 w-4 animate-spin" />
-              Creating account...
+              Creating account…
             </>
           ) : (
-            "Sign up"
+            "Create account"
           )}
         </Button>
       </form>

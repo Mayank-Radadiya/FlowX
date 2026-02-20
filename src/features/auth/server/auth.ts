@@ -15,8 +15,10 @@ import { prisma } from "@/lib/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
-
 export const auth = betterAuth({
+  // Base URL — required for building the correct OAuth callback URL
+  baseURL: process.env.BETTER_AUTH_URL,
+
   // Connect Better Auth to the Prisma database using the adapter
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -25,6 +27,14 @@ export const auth = betterAuth({
   // Enable basic email/password authentication
   emailAndPassword: {
     enabled: true,
-    autoSignIn: true, // Automatically sign the user in after successful registration
+    autoSignIn: true,
+  },
+
+  // Enable Google OAuth
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
   },
 });

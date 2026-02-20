@@ -24,10 +24,10 @@ const SignInForm = () => {
     <div>
       {/* Animated container for smooth entrance */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}     // Start hidden and slightly lower
-        animate={{ opacity: 1, y: 0 }}      // Fade in and move upward
+        initial={{ opacity: 0, y: 40 }} // Start hidden and slightly lower
+        animate={{ opacity: 1, y: 0 }} // Fade in and move upward
         transition={{ duration: 0.5, delay: 0.2 }} // Controlled timing for smooth UX
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-[480px] relative z-10"
       >
         {/* AuthCard provides layout, title, OAuth, and navigation */}
         <AuthCard formType="sign-in">

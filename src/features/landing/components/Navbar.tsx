@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { ToggleButton } from "@/components/global/ToggleButton";
 import { NAV_LINKS } from "../lib/constants";
 import AuthButton from "./AuthButton";
+import Image from "next/image";
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -20,10 +21,29 @@ function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/landing" className="flex items-center gap-2 group">
-          <div className="size-6 bg-primary" />
-          <span className="text-lg font-bold text-foreground tracking-tight uppercase">
-            FlowX
+        <Link
+          href="/"
+          className="group flex items-center gap-3 transition-all duration-300"
+        >
+          {/* Logo container with subtle glow and hover effects */}
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-background via-background to-background backdrop-blur-sm overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-primary/10">
+            <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-80"></div>
+
+            <Image
+              src={"/logo.svg"}
+              alt="Logo"
+              width={36}
+              height={36}
+              className="relative z-10 transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+
+          {/* Brand name */}
+          <span className="bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+            Flow
+            <span className="text-primary/90 font-bold text-3xl ml-1 font-mono">
+              X
+            </span>
           </span>
         </Link>
 

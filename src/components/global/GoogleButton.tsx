@@ -1,56 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { authClient } from "@/features/auth/client/lib/auth-client";
 
-type Props = {
-  onClick?: () => void;
-};
+export default function GoogleButton() {
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function GoogleButton({ onClick }: Props) {
+  async function handleGoogleSignIn() {
+    setIsLoading(true);
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/workflow",
+    });
+  }
+
   return (
-    <Button
-      variant="outline"
-      size="lg"
-      onClick={onClick}
-      className="
-        w-full p-0 overflow-hidden rounded-md shadow-sm hover:shadow-md transition-transform hover:-translate-y-05"
+    <button
+      type="button"
+      onClick={handleGoogleSignIn}
+      disabled={isLoading}
+      className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-border/60 bg-background/80 px-4 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:border-border hover:bg-muted/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]"
     >
-      <div className="flex items-center w-full">
-        {/* Google Icon Box */}
-        <div className="flex items-center justify-center h-10 w-10 bg-transparent/50 rounded-l-md shadow-sm border-r border-border/40 overflow-hidden">
-          <Image
-            src="/image/google.svg"
-            alt="Google"
-            width={20}
-            height={20}
-            className="block"
-          />
-        </div>
-
-        {/* Label */}
-        <span className="flex-1 text-center text-sm font-medium px-4 font-sans">
-          Continue with Google
-        </span>
-
-        {/* Arrow Icon */}
-        <span className="pr-3">
-          <svg
-            className="h-4 w-4 text-muted-foreground"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M9 6l6 6-6 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
-      </div>
-    </Button>
+      {isLoading ? (
+        <Loader2 className="size-4 animate-spin text-muted-foreground" />
+      ) : (
+        <Image
+          src="/image/google.svg"
+          alt="Google"
+          width={18}
+          height={18}
+          className="shrink-0"
+        />
+      )}
+      <span>{isLoading ? "Redirecting…" : "Continue with Google"}</span>
+    </button>
   );
 }

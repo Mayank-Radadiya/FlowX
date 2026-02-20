@@ -20,7 +20,6 @@ import { SignInFormType, signInZodSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "../lib/auth-client";
 import toast from "react-hot-toast";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
@@ -78,82 +77,75 @@ const SignInFormFields = () => {
           },
           onError: (ctx) => {
             toast.error(
-              `Sign in failed: ${ctx.error?.message || "Something went wrong."}`
+              `Sign in failed: ${ctx.error?.message || "Something went wrong."}`,
             );
           },
-        }
+        },
       );
     },
-    [router]
+    [router],
   );
 
   return (
     <form
-      className="space-y-4"
+      className="space-y-5"
       aria-busy={isSubmitting}
       onSubmit={handleSubmit(handleSignIn)}
     >
-      {/* ---------------- Email Field ---------------- */}
-      <div className="space-y-2 text-sm">
-        <Label htmlFor="email">Email</Label>
-
+      {/* Email */}
+      <div className="space-y-1.5">
+        <label
+          htmlFor="email"
+          className="text-xs font-medium text-muted-foreground uppercase tracking-wide"
+        >
+          Email
+        </label>
         <Input
           id="email"
           {...register("email")}
           type="email"
           placeholder="name@example.com"
           required
-          className="h-11 bg-background/50 backdrop-blur-sm hover:border-primary/50 focus:border-primary transition-colors mt-1.5"
+          className="h-10 bg-background/50 border-border/60 hover:border-border focus:border-primary/70 transition-colors  mt-1.5"
           aria-invalid={!!errors.email}
         />
-
-        {/* Email validation error */}
         {errors.email && (
-          <p className="text-xs text-destructive mt-1">
-            {errors.email.message}
-          </p>
+          <p className="text-xs text-destructive">{errors.email.message}</p>
         )}
       </div>
 
-      {/* ---------------- Password Field ---------------- */}
-      <div className="space-y-2">
-        <div className="relative">
-          <PasswordField {...register("password")} id="password" />
-        </div>
-
-        {/* Forgot password link */}
-        <div className="w-full flex justify-end">
+      {/* Password */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="password"
+            className="text-xs font-medium text-muted-foreground uppercase tracking-wide"
+          >
+            Password
+          </label>
           <Link
             href="/forgot-password"
-            className="text-xs text-primary hover:underline underline-offset-4"
+            className="text-xs text-primary hover:text-primary/80 transition-colors"
           >
             Forgot password?
           </Link>
         </div>
-
-        {/* Password validation error */}
+        <PasswordField {...register("password")} id="password" />
         {errors.password && (
-          <p className="text-xs text-destructive mt-1">
-            {errors.password.message}
-          </p>
+          <p className="text-xs text-destructive">{errors.password.message}</p>
         )}
       </div>
 
-      {/* ---------------- Submit Button ---------------- */}
+      {/* Submit */}
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="h-10 w-full rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 bg-linear-to-r from-primary to-primary/90 font-medium relative overflow-hidden group mt-2 text-white"
+        className="h-10 w-full rounded-xl bg-primary font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 text-white"
       >
-        {/* Animated shimmer background */}
-        <span className="absolute top-0 w-12 h-full bg-white/20 transform -translate-x-full skew-x-[-20deg] group-hover:translate-x-[750%] transition-transform duration-2000"></span>
-        <span className="absolute top-0 -left-5 w-12 h-full bg-white/20 transform -translate-x-full skew-x-[-20deg] group-hover:translate-x-[350%] transition-transform duration-3000"></span>
-
-        {/* Button content */}
         {isSubmitting ? (
           <>
             <Loader className="mr-2 h-4 w-4 animate-spin" />
-            Signing in...
+            Signing in…
           </>
         ) : (
           "Sign in"
