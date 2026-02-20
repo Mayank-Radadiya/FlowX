@@ -73,15 +73,15 @@ const SignUpFormFields = () => {
         {
           onSuccess: () => {
             toast.success("Signed in successfully!");
-            router.push("/");
+            router.push("/workflow");
           },
           onError: (ctx) => {
             toast.error(`Sign in failed: ${ctx.error.message}`);
           },
-        }
+        },
       );
     },
-    [router]
+    [router],
   );
 
   return (

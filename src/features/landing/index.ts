@@ -1,0 +1,10 @@
+export { default as Navbar } from "./components/Navbar";
+export { default as HeroSection } from "./components/HeroSection";
+export { default as WorkflowMockup } from "./components/WorkflowMockup";
+export { default as IntegrationsBar } from "./components/IntegrationsBar";
+export { default as FeaturesSection } from "./components/FeaturesSection";
+export { default as HowItWorksSection } from "./components/HowItWorksSection";
+export { default as PricingSection } from "./components/PricingSection";
+export { default as FAQSection } from "./components/FAQSection";
+export { default as CTABanner } from "./components/CTABanner";
+export { default as Footer } from "./components/Footer";

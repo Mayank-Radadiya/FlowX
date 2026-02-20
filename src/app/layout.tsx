@@ -2,23 +2,17 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Provider } from "@/provider/provider";
-import { AR_One_Sans, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 
-const arOneSans = AR_One_Sans({ subsets: ["latin"], variable: "--font-sans" });
-
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-mono",
-});
-
-const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-sans", // Setting as the default sans variable
 });
 
 export const metadata: Metadata = {
-  title: "FlowX",
-  description: "N8N Clone",
+  title: "FlowX - Workflow Automation",
+  description: "Visual workflow automation for modern teams.",
 };
 
 export default function RootLayout({
@@ -28,9 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${arOneSans.variable} ${jetbrainsMono.variable} ${sourceSerif.variable}`}
-      >
+      <body className={`${spaceMono.variable} antialiased`}>
         <Provider>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </Provider>

@@ -35,6 +35,6 @@ export const requiredUnAuth = async () => {
   });
 
   if (session) {
-    redirect("/");
+    redirect("/workflow");
   }
 };

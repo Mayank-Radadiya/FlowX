@@ -74,7 +74,7 @@ const SignInFormFields = () => {
         {
           onSuccess: () => {
             toast.success("Signed in successfully!");
-            router.push("/");
+            router.push("/workflow");
           },
           onError: (ctx) => {
             toast.error(
